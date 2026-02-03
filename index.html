@@ -3,194 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">متجر ياسمينا كيك</title>
+    <title>متجر ياسمينا كيك | Yasmina Cake</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
     <style>
         :root { --pink: #ff4d6d; --gold: #ffb703; --dark: #0a0a0a; --card: #161616; }
         body { font-family: 'Cairo', sans-serif; background: var(--dark); color: white; margin: 0; padding-bottom: 50px; overflow-x: hidden; }
-
-        header {
-            height: 45vh;
+        
+        header { 
+            height: 40vh; 
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
-                        url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1500');
-            background-size: cover; background-position: center;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            border-bottom: 4px solid var(--pink); text-align: center;
+                        url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1500'); 
+            background-size: cover; background-position: center; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            border-bottom: 4px solid var(--pink); text-align: center; 
         }
-        .logo { font-family: 'Dancing Script', cursive; font-size: 4.5rem; color: var(--pink); margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        
+        .logo { font-family: 'Dancing Script', cursive; font-size: 4rem; color: var(--pink); margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
         .slogan { color: var(--gold); font-size: 1.2rem; margin-top: 5px; }
-        .about-text { color: #ccc; font-size: 1rem; margin-top: 10px; max-width: 80%; }
-
+        
         .container { padding: 30px 5%; }
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
         
-        .card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #333; transition: 0.3s; display: flex; flex-direction: column; }
-        .card:hover { border-color: var(--pink); transform: translateY(-5px); }
+        .card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #333; display: flex; flex-direction: column; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: var(--pink); }
         
         .img-box { width: 100%; aspect-ratio: 1 / 1; background: #222; overflow: hidden; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-        .card-info { padding: 15px; text-align: center; flex-grow: 1; }
-        .card-info h3 { margin: 5px 0; color: white; font-size: 1.4rem; }
-        .price { color: var(--gold); font-size: 1.3rem; font-weight: bold; margin: 5px 0; display: block; }
-
-        #adminDashboard { 
-            display: none; background: #111; border: 2px solid var(--pink); 
-            margin: 40px auto; padding: 25px; border-radius: 20px; max-width: 800px;
-        }
-        .form-group { margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; text-align: right; }
-        input, textarea { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white; font-family: 'Cairo'; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
         
-        .btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-add { background: var(--pink); color: white; width: 100%; font-size: 1.1rem; }
-        .btn-save-brand { background: var(--gold); color: black; }
-        .btn-logout { background: #444; color: white; margin-top: 10px; }
+        .card-info { padding: 15px; text-align: center; }
+        .price { color: var(--gold); font-size: 1.3rem; font-weight: bold; margin: 10px 0; display: block; }
+
+        #adminArea { display: none; background: #111; border: 2px solid var(--pink); padding: 25px; border-radius: 20px; margin-bottom: 30px; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #444; background: #000; color: white; box-sizing: border-box; }
         
-        .file-custom { background: #222; border: 1px dashed var(--gold); color: var(--gold); padding: 15px; text-align: center; cursor: pointer; border-radius: 8px; }
-
-        .item-controls { display: flex; gap: 5px; justify-content: center; margin-top: 10px; padding: 10px; }
-        .btn-del { background: #ff4444; color: white; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer; flex: 1; }
-
+        .btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+        .btn-pink { background: var(--pink); color: white; }
+        .btn-gold { background: var(--gold); color: black; margin-top: 10px; }
+        
+        .file-label { background: #222; border: 1px dashed var(--gold); color: var(--gold); padding: 15px; display: block; text-align: center; cursor: pointer; border-radius: 8px; margin-bottom: 10px; }
+        
         .whatsapp { position: fixed; bottom: 20px; left: 20px; background: #25d366; color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; display: flex; align-items: center; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .admin-toggle { background: none; border: none; color: #111; cursor: pointer; margin-top: 80px; width: 100%; font-size: 10px; }
+        .admin-btn { background: none; border: none; color: #111; cursor: pointer; width: 100%; margin-top: 50px; font-size: 10px; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1 id="brandTitle" class="logo">ياسمينا كيك</h1>
+    <h1 id="brandName" class="logo">ياسمينا كيك</h1>
     <p id="brandSlogan" class="slogan">أجمل الحلويات بأيدٍ مصرية ✨</p>
-    <p id="brandAbout" class="about-text"></p>
 </header>
 
 <div class="container">
-    <div class="menu-grid" id="menuDisplay"></div>
-
-    <div id="adminDashboard">
-        <h2 style="color: var(--pink); text-align: center;">لوحة تحكم ياسمينا 👩‍🍳</h2>
+    <div id="adminArea">
+        <h2 style="text-align: center; color: var(--pink);">لوحة التحكم 👩‍🍳</h2>
         <div class="form-group">
-            <label>إعدادات البراند والتواصل:</label>
-            <input type="text" id="newBrandName" placeholder="اسم البراند الجديد">
-            <input type="text" id="newSlogan" placeholder="كلمة توصف المحل (سلوجان)">
-            <textarea id="newAbout" placeholder="اكتبي كلام عن مشروعك"></textarea>
-            <input type="text" id="newWhatsApp" placeholder="رقم الواتساب (مثال: 201234567890)">
-            <button class="btn btn-save-brand" onclick="updateBrand()">حفظ كافة التعديلات</button>
+            <input type="text" id="editName" placeholder="اسم المحل">
+            <input type="text" id="editSlogan" placeholder="وصف قصير">
+            <input type="text" id="editWA" placeholder="رقم الواتساب (مثال: 201234567890)">
+            <button class="btn btn-gold" onclick="saveSettings()">حفظ إعدادات الموقع</button>
         </div>
         <hr style="border: 0; border-top: 1px solid #333; margin: 30px 0;">
         <div class="form-group">
-            <label>إضافة صنف جديد:</label>
-            <label for="imgUpload" class="file-custom" id="fileLabel">اختيار صورة من تليفونك 📷</label>
-            <input type="file" id="imgUpload" accept="image/*" style="display: none;" onchange="previewFile()">
+            <label for="imgInp" class="file-label" id="fileMsg">اختيار صورة من المعرض 📷</label>
+            <input type="file" id="imgInp" accept="image/*" style="display: none;" onchange="handleImage()">
             <input type="text" id="pName" placeholder="اسم الصنف">
             <input type="text" id="pPrice" placeholder="السعر">
-            <button class="btn btn-add" onclick="addNewProduct()">إضافة للموقع فوراً</button>
+            <button class="btn btn-pink" onclick="addNewProduct()">إضافة للمتجر الآن</button>
         </div>
-        <button class="btn btn-logout" onclick="logoutAdmin()">خروج من الإدارة</button>
+        <button class="btn" style="background: #444; color: white; margin-top: 15px;" onclick="location.reload()">خروج</button>
     </div>
 
-    <button class="admin-toggle" onclick="loginAdmin()">دخول الإدارة</button>
+    <div class="menu-grid" id="menu"></div>
+    
+    <button class="admin-btn" onclick="checkLogin()">دخول الإدارة</button>
 </div>
 
-<a href="#" id="whatsappLink" class="whatsapp" target="_blank">طلب عبر واتساب 💬</a>
+<a href="#" id="waLink" class="whatsapp" target="_blank">طلب عبر واتساب 💬</a>
 
 <script>
-    // استخدام مفتاح تخزين جديد لضمان تحديث البيانات
-    let appData = JSON.parse(localStorage.getItem('yasmina_v_perfect')) || {
-        brand: "ياسمينا كيك",
-        slogan: "أجمل الحلويات بأيدٍ مصرية ✨",
-        about: "أهلاً بكم في عالمنا الصغير للحلويات المنزلية",
-        whatsapp: "201234567890",
-        items: []
+    // إعدادات Firebase الخاصة بمشروعك
+    const firebaseConfig = {
+        apiKey: "AIzaSyBPF_FD8xXwuiIaN7_T8yFTNx_RkVIgUh4",
+        authDomain: "yasminacake-48d62.firebaseapp.com",
+        databaseURL: "https://yasminacake-48d62-default-rtdb.firebaseio.com",
+        projectId: "yasminacake-48d62",
+        storageBucket: "yasminacake-48d62.firebasestorage.app",
+        messagingSenderId: "157210422639",
+        appId: "1:157210422639:web:b24ad405e45065df650c9a"
     };
 
-    let selectedImgBase64 = "";
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    let currentImg = "";
 
-    function loginAdmin() {
-        if(prompt("كلمة المرور:") === "123") {
-            document.getElementById('adminDashboard').style.display = 'block';
-            render();
-        }
-    }
+    function checkLogin() { if(prompt("كلمة السر:") === "123") document.getElementById('adminArea').style.display='block'; }
 
-    function logoutAdmin() {
-        document.getElementById('adminDashboard').style.display = 'none';
-        render(); // إعادة الرسم لإخفاء أزرار الحذف
-    }
-
-    function previewFile() {
-        const file = document.getElementById('imgUpload').files[0];
+    function handleImage() {
+        const file = document.getElementById('imgInp').files[0];
         const reader = new FileReader();
-        reader.onloadend = function() {
-            selectedImgBase64 = reader.result;
-            document.getElementById('fileLabel').innerText = "✅ تم اختيار الصورة";
-        }
-        if (file) reader.readAsDataURL(file);
+        reader.onloadend = () => { 
+            currentImg = reader.result; 
+            document.getElementById('fileMsg').innerText = "✅ تم اختيار الصورة بنجاح";
+        };
+        if(file) reader.readAsDataURL(file);
     }
 
-    function render() {
-        document.getElementById('brandTitle').innerText = appData.brand;
-        document.getElementById('brandSlogan').innerText = appData.slogan;
-        document.getElementById('brandAbout').innerText = appData.about;
-        document.getElementById('whatsappLink').href = "https://wa.me/" + appData.whatsapp;
-
-        const display = document.getElementById('menuDisplay');
-        const isAdmin = document.getElementById('adminDashboard').style.display === 'block';
-        display.innerHTML = '';
-
-        appData.items.forEach((item, index) => {
-            display.innerHTML += `
-                <div class="card">
-                    <div class="img-box"><img src="${item.img}"></div>
-                    <div class="card-info">
-                        <h3>${item.name}</h3>
-                        <span class="price">${item.price}</span>
-                        ${isAdmin ? `<div class="item-controls"><button class="btn-del" onclick="deleteItem(${index})">حذف</button></div>` : ''}
-                    </div>
-                </div>
-            `;
-        });
-        localStorage.setItem('yasmina_v_perfect', JSON.stringify(appData));
-    }
-
-    function updateBrand() {
-        const n = document.getElementById('newBrandName').value;
-        const s = document.getElementById('newSlogan').value;
-        const a = document.getElementById('newAbout').value;
-        const w = document.getElementById('newWhatsApp').value;
-        if(n) appData.brand = n;
-        if(s) appData.slogan = s;
-        if(a) appData.about = a;
-        if(w) appData.whatsapp = w;
-        render();
-        alert("تم الحفظ!");
+    function saveSettings() {
+        const name = document.getElementById('editName').value;
+        const slogan = document.getElementById('editSlogan').value;
+        const wa = document.getElementById('editWA').value;
+        database.ref('settings').set({ name, slogan, wa });
+        alert("تم تحديث البيانات بنجاح!");
     }
 
     function addNewProduct() {
         const name = document.getElementById('pName').value;
         const price = document.getElementById('pPrice').value;
-        if(selectedImgBase64 && name && price) {
-            appData.items.push({ name, price, img: selectedImgBase64 });
-            render();
-            // تصفير الخانات
-            selectedImgBase64 = "";
-            document.getElementById('pName').value = '';
-            document.getElementById('pPrice').value = '';
-            document.getElementById('fileLabel').innerText = "اختيار صورة من تليفونك 📷";
-            alert("تمت الإضافة بنجاح! انظري للأعلى ستجديها.");
-        } else {
-            alert("اكملي البيانات واختاري صورة أولاً");
-        }
+        if(currentImg && name && price) {
+            database.ref('products').push({ name, price, img: currentImg });
+            alert("تمت الإضافة! ستظهر في الموقع فوراً.");
+            document.getElementById('pName').value = ""; document.getElementById('pPrice').value = "";
+            document.getElementById('fileMsg').innerText = "اختيار صورة من المعرض 📷";
+        } else { alert("من فضلك اكملي كافة البيانات واختاري صورة"); }
     }
 
-    function deleteItem(index) {
-        if(confirm("حذف الصنف؟")) {
-            appData.items.splice(index, 1);
-            render();
-        }
-    }
+    function deleteProduct(id) { if(confirm("هل أنتِ متأكدة من حذف هذا الصنف؟")) database.ref('products/' + id).remove(); }
 
-    // تشغيل الموقع فوراً
-    render();
+    // قراءة البيانات لحظياً من السيرفر
+    database.ref().on('value', (snapshot) => {
+        const data = snapshot.val();
+        if(!data) return;
+
+        // تحديث معلومات المحل
+        if(data.settings) {
+            document.getElementById('brandName').innerText = data.settings.name || "ياسمينا كيك";
+            document.getElementById('brandSlogan').innerText = data.settings.slogan || "أجمل الحلويات ✨";
+            document.getElementById('waLink').href = "https://wa.me/" + (data.settings.wa || "201234567890");
+        }
+
+        // تحديث قائمة المنتجات
+        const menuDiv = document.getElementById('menu');
+        menuDiv.innerHTML = "";
+        if(data.products) {
+            Object.keys(data.products).forEach(id => {
+                const p = data.products[id];
+                const isAdmin = document.getElementById('adminArea').style.display === 'block';
+                menuDiv.innerHTML += `
+                    <div class="card">
+                        <div class="img-box"><img src="${p.img}"></div>
+                        <div class="card-info">
+                            <h3>${p.name}</h3>
+                            <span class="price">${p.price} ج.م</span>
+                            ${isAdmin ? `<button onclick="deleteProduct('${id}')" style="background:red; color:white; border:none; padding:8px; border-radius:5px; cursor:pointer;">حذف الصنف</button>` : ''}
+                        </div>
+                    </div>`;
+            });
+        }
+    });
 </script>
 </body>
 </html>
