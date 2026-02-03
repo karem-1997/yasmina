@@ -6,82 +6,94 @@
     <title>ياسمينا كيك | Yasmina Cake</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root { --pink: #ff4d6d; --gold: #ffb703; --dark: #0a0a0a; --card: #1a1a1a; }
+        :root { --pink: #ff4d6d; --gold: #ffb703; --dark: #0f0f0f; --card: #1a1a1a; }
         body { font-family: 'Cairo', sans-serif; background: var(--dark); color: white; margin: 0; padding-bottom: 50px; }
 
-        /* الهيدر */
         header {
-            height: 50vh;
+            height: 40vh;
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
                         url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1500');
             background-size: cover; background-position: center;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             border-bottom: 4px solid var(--pink);
         }
-        .logo { font-family: 'Dancing Script', cursive; font-size: 5rem; color: var(--pink); margin: 0; }
+        .logo { font-family: 'Dancing Script', cursive; font-size: 4rem; color: var(--pink); margin: 0; }
 
-        /* المنيو */
-        .container { padding: 40px 8%; }
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .container { padding: 20px 5%; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         
-        /* كارت الصنف - ضبط الصور */
-        .card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #333; transition: 0.3s; }
-        .card:hover { border-color: var(--pink); transform: translateY(-5px); }
+        /* حل مشكلة الصور المكسورة والفراغات */
+        .card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #333; display: flex; flex-direction: column; }
         
-        .img-box { width: 100%; aspect-ratio: 1 / 1; overflow: hidden; background: #222; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; } /* هذا السطر يمنع الفراغات */
+        .img-box { 
+            width: 100%; 
+            aspect-ratio: 1 / 1; 
+            background: #222 url('https://via.placeholder.com/400?text=Yasmina+Cake') center/cover;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .img-box img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; /* يملأ الفراغ بالكامل */
+            display: block;
+        }
+        /* يخفي الأيقونة المكسورة الصغيرة لو الرابط غلط */
+        img:not([src]), img[src=""] { opacity: 0; }
 
-        .card-info { padding: 20px; text-align: center; }
-        .card-info h3 { margin: 0; color: white; font-size: 1.4rem; }
-        .price { color: var(--gold); font-size: 1.2rem; font-weight: bold; margin: 10px 0; display: block; }
+        .card-info { padding: 15px; text-align: center; flex-grow: 1; }
+        .card-info h3 { margin: 5px 0; color: white; font-size: 1.3rem; }
+        .price { color: var(--gold); font-size: 1.4rem; font-weight: bold; margin: 5px 0; display: block; }
 
-        /* لوحة التحكم (الادمن) */
-        .admin-section { background: #111; border: 2px dashed var(--pink); margin-top: 50px; padding: 30px; border-radius: 20px; }
-        .admin-section h2 { color: var(--pink); }
-        .inputs-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-        input { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white; flex: 1; min-width: 200px; }
-        .btn-add { background: var(--pink); color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        /* لوحة التحكم */
+        .admin-section { background: #111; border: 2px dashed var(--pink); margin-top: 30px; padding: 20px; border-radius: 20px; }
+        .inputs-row { display: flex; flex-direction: column; gap: 10px; }
+        input { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white; }
+        .btn-add { background: var(--pink); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
         
-        .admin-btns { display: flex; gap: 5px; justify-content: center; margin-top: 10px; }
-        .btn-del { background: #ff4444; border: none; color: white; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
-        .btn-edit { background: var(--gold); border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .admin-btns { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+        .btn-del { background: #ff4444; border: none; color: white; padding: 8px 20px; border-radius: 6px; cursor: pointer; }
+        .btn-edit { background: var(--gold); border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; }
 
-        .whatsapp { position: fixed; bottom: 20px; left: 20px; background: #25d366; color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; }
+        .whatsapp { position: fixed; bottom: 20px; left: 20px; background: #25d366; color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; display: flex; align-items: center; gap: 10px; }
     </style>
 </head>
 <body>
 
 <header>
     <h1 class="logo">Yasmina Cake</h1>
-    <p style="color: var(--gold)">الحلويات المصنوعة بكل حب ✨</p>
+    <p style="color: var(--gold)">حلويات الملوك بلمسة ياسمينا ✨</p>
 </header>
 
 <div class="container">
-    <div class="menu-grid" id="menu">
-        </div>
+    <div class="menu-grid" id="menu"></div>
 
     <div id="adminArea" style="display:none;" class="admin-section">
-        <h2>لوحة تحكم ياسمينا 👩‍🍳</h2>
+        <h2 style="color: var(--pink); text-align:center;">إضافة صنف جديد</h2>
         <div class="inputs-row">
-            <input type="text" id="inImg" placeholder="رابط الصورة المباشر">
-            <input type="text" id="inName" placeholder="اسم الصنف">
-            <input type="text" id="inPrice" placeholder="السعر">
+            <input type="text" id="inImg" placeholder="انسخي رابط الصورة المباشر من ImgBB">
+            <input type="text" id="inName" placeholder="اسم الكيك">
+            <input type="text" id="inPrice" placeholder="السعر (مثلاً: 120 ج.م)">
             <button class="btn-add" onclick="addItem()">إضافة للموقع</button>
         </div>
     </div>
-    <center><button onclick="login()" style="background:none; border:none; color:#222; margin-top:50px; cursor:pointer;">دخول الإدارة</button></center>
+    <center><button onclick="login()" style="background:none; border:none; color:#222; margin-top:40px; cursor:pointer; font-size: 12px;">تسجيل دخول الإدارة</button></center>
 </div>
 
-<a href="https://wa.me/201234567890" class="whatsapp">اطلبي عبر واتساب 💬</a>
+<a href="https://wa.me/201234567890" class="whatsapp">
+    <span>اطلبي الآن عبر واتساب</span>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="25">
+</a>
 
 <script>
-    let products = JSON.parse(localStorage.getItem('cakes')) || [
-        { name: 'تورتة الشوكولاتة', price: '350 ج.م', img: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587' },
-        { name: 'كب كيك لوتس', price: '120 ج.م', img: 'https://images.unsplash.com/photo-1550617931-e17a7b70dce2' }
+    let products = JSON.parse(localStorage.getItem('cakes_db')) || [
+        { name: 'كيك الملوك', price: '120 ج.م', img: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587' }
     ];
 
     function login() {
-        let p = prompt("باسورد ياسمينا:");
+        let p = prompt("كلمة مرور الإدارة:");
         if(p === "123") document.getElementById('adminArea').style.display = 'block';
     }
 
@@ -91,7 +103,9 @@
         products.forEach((item, i) => {
             m.innerHTML += `
                 <div class="card">
-                    <div class="img-box"><img src="${item.img}"></div>
+                    <div class="img-box">
+                        <img src="${item.img}" onerror="this.parentElement.style.backgroundImage='url(https://via.placeholder.com/400?text=Yasmina+Cake)'">
+                    </div>
                     <div class="card-info">
                         <h3>${item.name}</h3>
                         <span class="price">${item.price}</span>
@@ -103,7 +117,7 @@
                 </div>
             `;
         });
-        localStorage.setItem('cakes', JSON.stringify(products));
+        localStorage.setItem('cakes_db', JSON.stringify(products));
     }
 
     function addItem() {
@@ -119,7 +133,7 @@
         }
     }
 
-    function delItem(i) { if(confirm('حذف؟')) { products.splice(i, 1); render(); } }
+    function delItem(i) { if(confirm('هل أنتي متأكدة من حذف هذا الصنف؟')) { products.splice(i, 1); render(); } }
     
     function editItem(i) {
         let nP = prompt("السعر الجديد:", products[i].price);
