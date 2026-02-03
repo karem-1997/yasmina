@@ -3,144 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ياسمينا كيك | Yasmina Cake</title>
+    <title id="pageTitle">ياسمينا كيك | Yasmina Cake</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root { --pink: #ff4d6d; --gold: #ffb703; --dark: #0f0f0f; --card: #1a1a1a; }
+        :root { --pink: #ff4d6d; --gold: #ffb703; --dark: #0a0a0a; --card: #161616; }
         body { font-family: 'Cairo', sans-serif; background: var(--dark); color: white; margin: 0; padding-bottom: 50px; }
 
+        /* الهيدر */
         header {
-            height: 40vh;
+            height: 45vh;
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
                         url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1500');
             background-size: cover; background-position: center;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            border-bottom: 4px solid var(--pink);
+            border-bottom: 4px solid var(--pink); text-align: center;
         }
-        .logo { font-family: 'Dancing Script', cursive; font-size: 4rem; color: var(--pink); margin: 0; }
+        .logo { font-family: 'Dancing Script', cursive; font-size: 5rem; color: var(--pink); margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        .slogan { color: var(--gold); font-size: 1.2rem; margin-top: 5px; }
 
-        .container { padding: 20px 5%; }
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        /* المنيو */
+        .container { padding: 30px 5%; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
         
-        /* حل مشكلة الصور المكسورة والفراغات */
-        .card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #333; display: flex; flex-direction: column; }
+        .card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #333; transition: 0.3s; display: flex; flex-direction: column; }
+        .card:hover { border-color: var(--pink); transform: translateY(-5px); }
         
-        .img-box { 
-            width: 100%; 
-            aspect-ratio: 1 / 1; 
-            background: #222 url('https://via.placeholder.com/400?text=Yasmina+Cake') center/cover;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .img-box img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; /* يملأ الفراغ بالكامل */
-            display: block;
-        }
-        /* يخفي الأيقونة المكسورة الصغيرة لو الرابط غلط */
-        img:not([src]), img[src=""] { opacity: 0; }
+        .img-box { width: 100%; aspect-ratio: 1 / 1; background: #222; overflow: hidden; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         .card-info { padding: 15px; text-align: center; flex-grow: 1; }
-        .card-info h3 { margin: 5px 0; color: white; font-size: 1.3rem; }
-        .price { color: var(--gold); font-size: 1.4rem; font-weight: bold; margin: 5px 0; display: block; }
+        .card-info h3 { margin: 5px 0; color: white; font-size: 1.4rem; }
+        .price { color: var(--gold); font-size: 1.3rem; font-weight: bold; margin: 5px 0; display: block; }
 
-        /* لوحة التحكم */
-        .admin-section { background: #111; border: 2px dashed var(--pink); margin-top: 30px; padding: 20px; border-radius: 20px; }
-        .inputs-row { display: flex; flex-direction: column; gap: 10px; }
-        input { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white; }
-        .btn-add { background: var(--pink); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        /* لوحة التحكم (الداشبورد) */
+        .admin-dashboard { 
+            display: none; background: #111; border: 2px solid var(--pink); 
+            margin: 40px auto; padding: 25px; border-radius: 20px; max-width: 800px;
+        }
+        .admin-dashboard h2 { color: var(--pink); border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .form-group { margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; text-align: right; }
+        input { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white; font-family: 'Cairo'; }
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-add { background: var(--pink); color: white; flex: 1; }
+        .btn-save-brand { background: var(--gold); color: black; }
         
-        .admin-btns { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
-        .btn-del { background: #ff4444; border: none; color: white; padding: 8px 20px; border-radius: 6px; cursor: pointer; }
-        .btn-edit { background: var(--gold); border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; }
+        .item-controls { display: flex; gap: 5px; justify-content: center; margin-top: 10px; }
+        .btn-del { background: #ff4444; color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
+        .btn-edit { background: var(--gold); border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
 
-        .whatsapp { position: fixed; bottom: 20px; left: 20px; background: #25d366; color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; display: flex; align-items: center; gap: 10px; }
+        .whatsapp { position: fixed; bottom: 20px; left: 20px; background: #25d366; color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; display: flex; align-items: center; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .admin-toggle { background: none; border: 1px solid #222; color: #222; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-top: 20px; font-size: 10px; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1 class="logo">Yasmina Cake</h1>
-    <p style="color: var(--gold)">حلويات الملوك بلمسة ياسمينا ✨</p>
+    <h1 id="brandTitle" class="logo">ياسمينا كيك</h1>
+    <p id="brandSlogan" class="slogan">حلويات صنعت بكل حب ✨</p>
 </header>
 
 <div class="container">
-    <div class="menu-grid" id="menu"></div>
+    <div class="menu-grid" id="menuDisplay"></div>
 
-    <div id="adminArea" style="display:none;" class="admin-section">
-        <h2 style="color: var(--pink); text-align:center;">إضافة صنف جديد</h2>
-        <div class="inputs-row">
-            <input type="text" id="inImg" placeholder="انسخي رابط الصورة المباشر من ImgBB">
-            <input type="text" id="inName" placeholder="اسم الكيك">
-            <input type="text" id="inPrice" placeholder="السعر (مثلاً: 120 ج.م)">
-            <button class="btn-add" onclick="addItem()">إضافة للموقع</button>
+    <div id="dashboard" class="admin-dashboard">
+        <h2>لوحة تحكم المديرة 👩‍🍳</h2>
+        
+        <div class="form-group">
+            <label>تغيير اسم البراند والوصف:</label>
+            <input type="text" id="newBrandName" placeholder="اسم البراند الجديد">
+            <input type="text" id="newSlogan" placeholder="وصف البراند (سلوجان)">
+            <button class="btn btn-save-brand" onclick="updateBrand()">حفظ إعدادات البراند</button>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
+
+        <div class="form-group">
+            <label>إضافة صنف جديد للمنيو:</label>
+            <input type="text" id="pImg" placeholder="رابط الصورة (Direct Link من ImgBB)">
+            <input type="text" id="pName" placeholder="اسم المنتج">
+            <input type="text" id="pPrice" placeholder="السعر (مثلاً: 150 ج.م)">
+            <button class="btn btn-add" onclick="addNewProduct()">إضافة للمنيو فوراً</button>
         </div>
     </div>
-    <center><button onclick="login()" style="background:none; border:none; color:#222; margin-top:40px; cursor:pointer; font-size: 12px;">تسجيل دخول الإدارة</button></center>
+
+    <center>
+        <button class="admin-toggle" onclick="openAdmin()">دخول لوحة التحكم</button>
+    </center>
 </div>
 
 <a href="https://wa.me/201234567890" class="whatsapp">
-    <span>اطلبي الآن عبر واتساب</span>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="25">
+    <span>طلب عبر واتساب</span>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="20">
 </a>
 
 <script>
-    let products = JSON.parse(localStorage.getItem('cakes_db')) || [
-        { name: 'كيك الملوك', price: '120 ج.م', img: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587' }
-    ];
+    // قاعدة البيانات (البراند والمنتجات)
+    let siteData = JSON.parse(localStorage.getItem('yasmina_store_v3')) || {
+        brandName: "ياسمينا كيك",
+        slogan: "حلويات صنعت بكل حب ✨",
+        products: [
+            { name: "كيك الملوك", price: "250 ج.م", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587" }
+        ]
+    };
 
-    function login() {
+    // وظيفة الدخول
+    function openAdmin() {
         let p = prompt("كلمة مرور الإدارة:");
-        if(p === "123") document.getElementById('adminArea').style.display = 'block';
+        if(p === "123") {
+            document.getElementById('dashboard').style.display = 'block';
+            window.scrollTo(0, document.getElementById('dashboard').offsetTop);
+        }
     }
 
-    function render() {
-        const m = document.getElementById('menu');
-        m.innerHTML = '';
-        products.forEach((item, i) => {
-            m.innerHTML += `
+    // تحديث واجهة المحل
+    function refreshUI() {
+        document.getElementById('brandTitle').innerText = siteData.brandName;
+        document.getElementById('brandSlogan').innerText = siteData.slogan;
+        document.getElementById('pageTitle').innerText = siteData.brandName + " | الرئيسية";
+        
+        const menu = document.getElementById('menuDisplay');
+        menu.innerHTML = '';
+        
+        siteData.products.forEach((item, index) => {
+            menu.innerHTML += `
                 <div class="card">
                     <div class="img-box">
-                        <img src="${item.img}" onerror="this.parentElement.style.backgroundImage='url(https://via.placeholder.com/400?text=Yasmina+Cake)'">
+                        <img src="${item.img}" onerror="this.src='https://via.placeholder.com/400x400?text=Image+Error'">
                     </div>
                     <div class="card-info">
                         <h3>${item.name}</h3>
                         <span class="price">${item.price}</span>
-                        <div class="admin-btns">
-                            <button class="btn-edit" onclick="editItem(${i})">تعديل</button>
-                            <button class="btn-del" onclick="delItem(${i})">حذف</button>
+                        <div class="item-controls" id="controls-${index}" style="display:${document.getElementById('dashboard').style.display === 'block' ? 'flex' : 'none'}">
+                            <button class="btn-edit" onclick="editProduct(${index})">تعديل</button>
+                            <button class="btn-del" onclick="deleteProduct(${index})">حذف</button>
                         </div>
                     </div>
                 </div>
             `;
         });
-        localStorage.setItem('cakes_db', JSON.stringify(products));
+        localStorage.setItem('yasmina_store_v3', JSON.stringify(siteData));
     }
 
-    function addItem() {
-        const img = document.getElementById('inImg').value;
-        const name = document.getElementById('inName').value;
-        const price = document.getElementById('inPrice').value;
+    // وظائف التحكم
+    function updateBrand() {
+        const name = document.getElementById('newBrandName').value;
+        const slogan = document.getElementById('newSlogan').value;
+        if(name) siteData.brandName = name;
+        if(slogan) siteData.slogan = slogan;
+        refreshUI();
+        alert("تم تحديث بيانات البراند بنجاح!");
+    }
+
+    function addNewProduct() {
+        const img = document.getElementById('pImg').value;
+        const name = document.getElementById('pName').value;
+        const price = document.getElementById('pPrice').value;
         if(img && name && price) {
-            products.push({name, price, img});
-            render();
-            document.getElementById('inImg').value = '';
-            document.getElementById('inName').value = '';
-            document.getElementById('inPrice').value = '';
+            siteData.products.push({name, price, img});
+            refreshUI();
+            document.getElementById('pImg').value = '';
+            document.getElementById('pName').value = '';
+            document.getElementById('pPrice').value = '';
+        } else {
+            alert("برجاء ملء كافة الخانات");
         }
     }
 
-    function delItem(i) { if(confirm('هل أنتي متأكدة من حذف هذا الصنف؟')) { products.splice(i, 1); render(); } }
-    
-    function editItem(i) {
-        let nP = prompt("السعر الجديد:", products[i].price);
-        if(nP) { products[i].price = nP; render(); }
+    function deleteProduct(index) {
+        if(confirm("حذف هذا المنتج؟")) {
+            siteData.products.splice(index, 1);
+            refreshUI();
+        }
     }
 
-    render();
+    function editProduct(index) {
+        let newName = prompt("الاسم الجديد:", siteData.products[index].name);
+        let newPrice = prompt("السعر الجديد:", siteData.products[index].price);
+        if(newName) siteData.products[index].name = newName;
+        if(newPrice) siteData.products[index].price = newPrice;
+        refreshUI();
+    }
+
+    // البداية
+    refreshUI();
 </script>
 </body>
 </html>
