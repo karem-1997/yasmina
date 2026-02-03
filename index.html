@@ -9,7 +9,6 @@
         :root { --pink: #ff4d6d; --gold: #ffb703; --dark: #0a0a0a; --card: #161616; }
         body { font-family: 'Cairo', sans-serif; background: var(--dark); color: white; margin: 0; padding-bottom: 50px; overflow-x: hidden; }
 
-        /* الهيدر */
         header {
             height: 45vh;
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
@@ -22,7 +21,6 @@
         .slogan { color: var(--gold); font-size: 1.2rem; margin-top: 5px; }
         .about-text { color: #ccc; font-size: 1rem; margin-top: 10px; max-width: 80%; }
 
-        /* المنيو */
         .container { padding: 30px 5%; }
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
         
@@ -36,18 +34,17 @@
         .card-info h3 { margin: 5px 0; color: white; font-size: 1.4rem; }
         .price { color: var(--gold); font-size: 1.3rem; font-weight: bold; margin: 5px 0; display: block; }
 
-        /* لوحة التحكم (الداشبورد) */
         #adminDashboard { 
             display: none; background: #111; border: 2px solid var(--pink); 
             margin: 40px auto; padding: 25px; border-radius: 20px; max-width: 800px;
         }
-        .admin-dashboard h2 { color: var(--pink); border-bottom: 1px solid #333; padding-bottom: 10px; text-align: center; }
         .form-group { margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; text-align: right; }
         input, textarea { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white; font-family: 'Cairo'; }
         
         .btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .btn-add { background: var(--pink); color: white; width: 100%; font-size: 1.1rem; }
         .btn-save-brand { background: var(--gold); color: black; }
+        .btn-logout { background: #444; color: white; margin-top: 10px; }
         
         .file-custom { background: #222; border: 1px dashed var(--gold); color: var(--gold); padding: 15px; text-align: center; cursor: pointer; border-radius: 8px; }
 
@@ -55,7 +52,7 @@
         .btn-del { background: #ff4444; color: white; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer; flex: 1; }
 
         .whatsapp { position: fixed; bottom: 20px; left: 20px; background: #25d366; color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; display: flex; align-items: center; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .admin-toggle { background: none; border: none; color: #1a1a1a; cursor: pointer; margin-top: 50px; width: 100%; font-size: 10px; }
+        .admin-toggle { background: none; border: none; color: #111; cursor: pointer; margin-top: 80px; width: 100%; font-size: 10px; }
     </style>
 </head>
 <body>
@@ -71,26 +68,24 @@
 
     <div id="adminDashboard">
         <h2 style="color: var(--pink); text-align: center;">لوحة تحكم ياسمينا 👩‍🍳</h2>
-        
         <div class="form-group">
             <label>إعدادات البراند والتواصل:</label>
             <input type="text" id="newBrandName" placeholder="اسم البراند الجديد">
             <input type="text" id="newSlogan" placeholder="كلمة توصف المحل (سلوجان)">
-            <textarea id="newAbout" placeholder="اكتبي كلام عن مشروعك (عن البراند)"></textarea>
+            <textarea id="newAbout" placeholder="اكتبي كلام عن مشروعك"></textarea>
             <input type="text" id="newWhatsApp" placeholder="رقم الواتساب (مثال: 201234567890)">
             <button class="btn btn-save-brand" onclick="updateBrand()">حفظ كافة التعديلات</button>
         </div>
-
         <hr style="border: 0; border-top: 1px solid #333; margin: 30px 0;">
-
         <div class="form-group">
-            <label>إضافة صنف جديد للمنيو:</label>
-            <label for="imgUpload" class="file-custom" id="fileLabel">اضغطي هنا لاختيار صورة من تليفونك 📷</label>
+            <label>إضافة صنف جديد:</label>
+            <label for="imgUpload" class="file-custom" id="fileLabel">اختيار صورة من تليفونك 📷</label>
             <input type="file" id="imgUpload" accept="image/*" style="display: none;" onchange="previewFile()">
-            <input type="text" id="pName" placeholder="اسم الصنف (مثلاً: تورتة مانجو)">
-            <input type="text" id="pPrice" placeholder="السعر (مثلاً: 200 ج.م)">
+            <input type="text" id="pName" placeholder="اسم الصنف">
+            <input type="text" id="pPrice" placeholder="السعر">
             <button class="btn btn-add" onclick="addNewProduct()">إضافة للموقع فوراً</button>
         </div>
+        <button class="btn btn-logout" onclick="logoutAdmin()">خروج من الإدارة</button>
     </div>
 
     <button class="admin-toggle" onclick="loginAdmin()">دخول الإدارة</button>
@@ -99,8 +94,8 @@
 <a href="#" id="whatsappLink" class="whatsapp" target="_blank">طلب عبر واتساب 💬</a>
 
 <script>
-    // تخزين البيانات شاملة الإضافات الجديدة
-    let appData = JSON.parse(localStorage.getItem('yasmina_vFinal_v2')) || {
+    // استخدام مفتاح تخزين جديد لضمان تحديث البيانات
+    let appData = JSON.parse(localStorage.getItem('yasmina_v_perfect')) || {
         brand: "ياسمينا كيك",
         slogan: "أجمل الحلويات بأيدٍ مصرية ✨",
         about: "أهلاً بكم في عالمنا الصغير للحلويات المنزلية",
@@ -114,8 +109,12 @@
         if(prompt("كلمة المرور:") === "123") {
             document.getElementById('adminDashboard').style.display = 'block';
             render();
-            window.scrollTo(0, document.getElementById('adminDashboard').offsetTop);
         }
+    }
+
+    function logoutAdmin() {
+        document.getElementById('adminDashboard').style.display = 'none';
+        render(); // إعادة الرسم لإخفاء أزرار الحذف
     }
 
     function previewFile() {
@@ -124,22 +123,18 @@
         reader.onloadend = function() {
             selectedImgBase64 = reader.result;
             document.getElementById('fileLabel').innerText = "✅ تم اختيار الصورة";
-            document.getElementById('fileLabel').style.borderColor = "#25d366";
         }
         if (file) reader.readAsDataURL(file);
     }
 
     function render() {
-        // تحديث النصوص في الهيدر
         document.getElementById('brandTitle').innerText = appData.brand;
         document.getElementById('brandSlogan').innerText = appData.slogan;
         document.getElementById('brandAbout').innerText = appData.about;
-        document.getElementById('pageTitle').innerText = appData.brand;
-        
-        // تحديث رابط الواتساب
         document.getElementById('whatsappLink').href = "https://wa.me/" + appData.whatsapp;
 
         const display = document.getElementById('menuDisplay');
+        const isAdmin = document.getElementById('adminDashboard').style.display === 'block';
         display.innerHTML = '';
 
         appData.items.forEach((item, index) => {
@@ -149,14 +144,12 @@
                     <div class="card-info">
                         <h3>${item.name}</h3>
                         <span class="price">${item.price}</span>
-                        <div class="item-controls" style="display:${document.getElementById('adminDashboard').style.display === 'block' ? 'flex' : 'none'}">
-                            <button class="btn-del" onclick="deleteItem(${index})">حذف الصنف</button>
-                        </div>
+                        ${isAdmin ? `<div class="item-controls"><button class="btn-del" onclick="deleteItem(${index})">حذف</button></div>` : ''}
                     </div>
                 </div>
             `;
         });
-        localStorage.setItem('yasmina_vFinal_v2', JSON.stringify(appData));
+        localStorage.setItem('yasmina_v_perfect', JSON.stringify(appData));
     }
 
     function updateBrand() {
@@ -164,14 +157,12 @@
         const s = document.getElementById('newSlogan').value;
         const a = document.getElementById('newAbout').value;
         const w = document.getElementById('newWhatsApp').value;
-        
         if(n) appData.brand = n;
         if(s) appData.slogan = s;
         if(a) appData.about = a;
-        if(w) appData.whatsapp = w.replace(/\+/g, ''); // إزالة علامة + لو كتبت
-        
+        if(w) appData.whatsapp = w;
         render();
-        alert("تم حفظ كافة التعديلات بنجاح!");
+        alert("تم الحفظ!");
     }
 
     function addNewProduct() {
@@ -180,22 +171,25 @@
         if(selectedImgBase64 && name && price) {
             appData.items.push({ name, price, img: selectedImgBase64 });
             render();
+            // تصفير الخانات
             selectedImgBase64 = "";
             document.getElementById('pName').value = '';
             document.getElementById('pPrice').value = '';
-            document.getElementById('fileLabel').innerText = "اضغطي هنا لاختيار صورة من تليفونك 📷";
+            document.getElementById('fileLabel').innerText = "اختيار صورة من تليفونك 📷";
+            alert("تمت الإضافة بنجاح! انظري للأعلى ستجديها.");
         } else {
-            alert("من فضلك اختاري صورة واكتبي الاسم والسعر");
+            alert("اكملي البيانات واختاري صورة أولاً");
         }
     }
 
     function deleteItem(index) {
-        if(confirm("هل أنتي متأكدة من حذف هذا الصنف؟")) {
+        if(confirm("حذف الصنف؟")) {
             appData.items.splice(index, 1);
             render();
         }
     }
 
+    // تشغيل الموقع فوراً
     render();
 </script>
 </body>
