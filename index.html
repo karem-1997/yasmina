@@ -6,113 +6,133 @@
     <title>ياسمينا كيك | Yasmina Cake Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root { --main-pink: #e91e63; --gold: #ffb703; --dark: #121212; }
-        body { font-family: 'Cairo', sans-serif; background: var(--dark); color: white; margin: 0; text-align: center; }
+        :root { --main-pink: #e91e63; --gold: #ffb703; --dark: #0f0f0f; }
+        body { font-family: 'Cairo', sans-serif; background: var(--dark); color: white; margin: 0; padding-bottom: 50px; }
         
-        /* الهيدر */
-        header { padding: 80px 20px; background: linear-gradient(45deg, #000, #222); border-bottom: 3px solid var(--main-pink); }
-        .logo { font-family: 'Dancing Script', cursive; font-size: 5rem; color: var(--main-pink); margin: 0; }
+        header { padding: 60px 20px; background: #000; border-bottom: 4px solid var(--main-pink); text-align: center; }
+        .logo { font-family: 'Dancing Script', cursive; font-size: 4.5rem; color: var(--main-pink); margin: 0; }
 
-        /* منطقة المنيو */
-        .menu-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 25px; padding: 40px 10%; 
+        /* لوحة التحكم */
+        #adminPanel { 
+            display: none; background: #1a1a1a; padding: 25px; border: 2px solid var(--gold);
+            margin: 20px 10%; border-radius: 15px; box-shadow: 0 0 20px rgba(255,183,3,0.2);
         }
-        .card { background: #1e1e1e; border-radius: 15px; overflow: hidden; border: 1px solid #333; transition: 0.3s; }
+        .admin-inputs input { padding: 12px; margin: 10px 5px; border-radius: 8px; border: none; width: 250px; font-family: 'Cairo'; }
+        .btn-action { background: var(--main-pink); color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-admin-toggle { background: transparent; color: #333; border: none; cursor: pointer; font-size: 12px; margin-top: 10px; }
+
+        /* الشبكة (المنيو) */
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 40px 10%; }
+        .card { background: #1a1a1a; border-radius: 20px; overflow: hidden; border: 1px solid #333; transition: 0.4s; position: relative; }
         .card:hover { transform: translateY(-10px); border-color: var(--main-pink); }
         .card img { width: 100%; height: 250px; object-fit: cover; }
-        .card-body { padding: 15px; }
-        .price-tag { color: var(--gold); font-weight: bold; font-size: 1.2rem; }
-
-        /* لوحة تحكم ياسمينا (مخفية في البداية) */
-        #adminPanel { 
-            display: none; background: #222; padding: 20px; border: 2px dashed var(--main-pink);
-            margin: 20px 10%; border-radius: 15px;
-        }
-        input { padding: 10px; margin: 5px; border-radius: 5px; border: none; width: 80%; max-width: 300px; }
-        .btn-add { background: var(--main-pink); color: white; padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; }
+        .card-body { padding: 20px; text-align: center; }
+        .price-tag { color: var(--gold); font-size: 1.5rem; font-weight: bold; display: block; margin: 10px 0; }
         
-        /* زرار سري لفتح التحكم */
-        .secret-login { background: none; border: none; color: #333; cursor: pointer; font-size: 10px; }
+        /* أزرار الحذف والتعديل (تظهر لياسمينا فقط) */
+        .admin-controls { display: none; margin-top: 15px; border-top: 1px solid #333; padding-top: 10px; }
+        .btn-delete { background: #ff4444; color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; margin-left: 5px; }
+        .btn-edit { background: var(--gold); color: black; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
 
-        .whatsapp-btn {
-            position: fixed; bottom: 20px; left: 20px; background: #25d366; 
-            color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none;
-        }
+        .whatsapp-btn { position: fixed; bottom: 30px; left: 30px; background: #25d366; color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 100; }
     </style>
 </head>
 <body>
 
     <header>
         <h1 class="logo">Yasmina Cake</h1>
-        <p>مطبخ السعادة لجميع أنواع الحلويات</p>
-        <button class="secret-login" onclick="login()">لوحة الإدارة</button>
+        <p>عالم من الحلويات الساحرة</p>
+        <button class="btn-admin-toggle" onclick="checkAuth()">دخول الإدارة</button>
     </header>
 
     <div id="adminPanel">
-        <h3>مرحباً ياسمينا.. أضيفي صنف جديد ✨</h3>
-        <input type="text" id="imgUrl" placeholder="حطي رابط صورة الحلويات هنا">
-        <br>
-        <input type="text" id="itemName" placeholder="اسم الصنف (مثلاً: تورتة شوكولاتة)">
-        <br>
-        <input type="number" id="itemPrice" placeholder="السعر">
-        <br>
-        <button class="btn-add" onclick="addItem()">إضافة للموقع فوراً</button>
+        <h2 style="color: var(--gold)">لوحة تحكم ياسمينا ✨</h2>
+        <div class="admin-inputs">
+            <input type="text" id="imgInput" placeholder="رابط صورة الحلوى">
+            <input type="text" id="nameInput" placeholder="اسم الصنف">
+            <input type="text" id="priceInput" placeholder="السعر (مثلاً: 250 ج.م)">
+            <button class="btn-action" onclick="addNewItem()">إضافة الصنف</button>
+        </div>
+        <p style="font-size: 12px; color: #888;">* لتعديل السعر أو الحذف، استخدم الأزرار التي ستظهر على الكروت أسفله.</p>
     </div>
 
-    <div class="menu-grid" id="mainMenu">
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587" alt="تورتة">
-            <div class="card-body">
-                <h3>تورتة ملكية</h3>
-                <p class="price-tag">350 ج.م</p>
-            </div>
+    <div class="menu-grid" id="menuDisplay">
         </div>
-    </div>
 
     <a href="https://wa.me/201234567890" class="whatsapp-btn">اطلبي عبر واتساب 💬</a>
 
     <script>
-        // دالة الدخول (الباسورد)
-        function login() {
-            let password = prompt("أدخلي كلمة السر الخاصة بكِ يا ياسمينا:");
-            if (password === "yasmina123") { // الباسورد هنا هو yasmina123 تقدر تغيره
+        let isAdmin = false;
+        let menuItems = JSON.parse(localStorage.getItem('yasminaMenu')) || [
+            { id: 1, name: 'تورتة شوكولاتة فاخرة', price: '350 ج.م', img: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587' },
+            { id: 2, name: 'كب كيك ريد فيلفيت', price: '150 ج.م', img: 'https://images.unsplash.com/photo-1550617931-e17a7b70dce2' }
+        ];
+
+        function checkAuth() {
+            let pass = prompt("من فضلك أدخلي كلمة السر:");
+            if (pass === "yasmina2026") {
+                isAdmin = true;
                 document.getElementById('adminPanel').style.display = 'block';
-                alert("أهلاً يا ملكة الحلويات! تقدرين الآن إضافة أصناف جديدة.");
+                renderMenu();
+                alert("مرحباً يا ياسمينا! يمكنك الآن التحكم في المنيو.");
             } else {
-                alert("كلمة السر غلط يا قمر!");
+                alert("كلمة سر خاطئة!");
             }
         }
 
-        // دالة إضافة صنف جديد للمنيو
-        function addItem() {
-            const url = document.getElementById('imgUrl').value;
-            const name = document.getElementById('itemName').value;
-            const price = document.getElementById('itemPrice').value;
-
-            if(url && name && price) {
-                const menu = document.getElementById('mainMenu');
-                const newCard = `
+        function renderMenu() {
+            const display = document.getElementById('menuDisplay');
+            display.innerHTML = '';
+            
+            menuItems.forEach((item, index) => {
+                display.innerHTML += `
                     <div class="card">
-                        <img src="${url}" alt="${name}">
+                        <img src="${item.img}" alt="${item.name}">
                         <div class="card-body">
-                            <h3>${name}</h3>
-                            <p class="price-tag">${price} ج.م</p>
+                            <h3>${item.name}</h3>
+                            <span class="price-tag">${item.price}</span>
+                            <div class="admin-controls" style="display: ${isAdmin ? 'block' : 'none'}">
+                                <button class="btn-edit" onclick="editPrice(${index})">تعديل السعر</button>
+                                <button class="btn-delete" onclick="deleteItem(${index})">حذف</button>
+                            </div>
                         </div>
                     </div>
                 `;
-                menu.innerHTML += newCard;
-                
-                // مسح الخانات بعد الإضافة
-                document.getElementById('imgUrl').value = '';
-                document.getElementById('itemName').value = '';
-                document.getElementById('itemPrice').value = '';
-            } else {
-                alert("من فضلك كملي البيانات (الصورة والاسم والسعر)");
+            });
+            localStorage.setItem('yasminaMenu', JSON.stringify(menuItems));
+        }
+
+        function addNewItem() {
+            const img = document.getElementById('imgInput').value;
+            const name = document.getElementById('nameInput').value;
+            const price = document.getElementById('priceInput').value;
+
+            if(img && name && price) {
+                menuItems.push({ id: Date.now(), name, price, img });
+                renderMenu();
+                document.getElementById('imgInput').value = '';
+                document.getElementById('nameInput').value = '';
+                document.getElementById('priceInput').value = '';
             }
         }
+
+        function deleteItem(index) {
+            if(confirm("هل أنتي متأكدة من حذف هذا الصنف؟")) {
+                menuItems.splice(index, 1);
+                renderMenu();
+            }
+        }
+
+        function editPrice(index) {
+            let newPrice = prompt("أدخلي السعر الجديد:", menuItems[index].price);
+            if (newPrice) {
+                menuItems[index].price = newPrice;
+                renderMenu();
+            }
+        }
+
+        // تشغيل المنيو عند فتح الصفحة لأول مرة
+        renderMenu();
     </script>
 </body>
 </html>
-
