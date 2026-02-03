@@ -9,184 +9,172 @@
         :root { --pink: #ff4d6d; --gold: #ffb703; --dark: #0a0a0a; --card: #161616; }
         body { font-family: 'Cairo', sans-serif; background: var(--dark); color: white; margin: 0; padding-bottom: 50px; }
 
-        /* الهيدر */
         header {
-            height: 45vh;
+            height: 40vh;
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
                         url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1500');
             background-size: cover; background-position: center;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             border-bottom: 4px solid var(--pink); text-align: center;
         }
-        .logo { font-family: 'Dancing Script', cursive; font-size: 5rem; color: var(--pink); margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
-        .slogan { color: var(--gold); font-size: 1.2rem; margin-top: 5px; }
+        .logo { font-family: 'Dancing Script', cursive; font-size: 4.5rem; color: var(--pink); margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        .slogan { color: var(--gold); font-size: 1.1rem; margin-top: 5px; }
 
-        /* المنيو */
-        .container { padding: 30px 5%; }
+        .container { padding: 20px 5%; }
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
         
-        .card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #333; transition: 0.3s; display: flex; flex-direction: column; }
-        .card:hover { border-color: var(--pink); transform: translateY(-5px); }
+        .card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #333; display: flex; flex-direction: column; transition: 0.3s; }
+        .card:hover { border-color: var(--pink); }
         
         .img-box { width: 100%; aspect-ratio: 1 / 1; background: #222; overflow: hidden; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-        .card-info { padding: 15px; text-align: center; flex-grow: 1; }
-        .card-info h3 { margin: 5px 0; color: white; font-size: 1.4rem; }
-        .price { color: var(--gold); font-size: 1.3rem; font-weight: bold; margin: 5px 0; display: block; }
+        .card-info { padding: 15px; text-align: center; }
+        .card-info h3 { margin: 5px 0; font-size: 1.3rem; color: white; }
+        .price { color: var(--gold); font-size: 1.2rem; font-weight: bold; margin: 5px 0; display: block; }
 
-        /* لوحة التحكم (الداشبورد) */
-        .admin-dashboard { 
-            display: none; background: #111; border: 2px solid var(--pink); 
-            margin: 40px auto; padding: 25px; border-radius: 20px; max-width: 800px;
-        }
-        .admin-dashboard h2 { color: var(--pink); border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .form-group { margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; text-align: right; }
-        input { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white; font-family: 'Cairo'; }
-        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
-        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-add { background: var(--pink); color: white; flex: 1; }
-        .btn-save-brand { background: var(--gold); color: black; }
+        /* لوحة التحكم */
+        .admin-dashboard { display: none; background: #111; border: 2px solid var(--pink); margin: 30px auto; padding: 25px; border-radius: 20px; max-width: 600px; }
+        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px; text-align: right; }
+        input, select { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white; font-family: 'Cairo'; }
         
+        .btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-add { background: var(--pink); color: white; margin-top: 10px; }
+        .btn-brand { background: var(--gold); color: black; }
+
         .item-controls { display: flex; gap: 5px; justify-content: center; margin-top: 10px; }
         .btn-del { background: #ff4444; color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
-        .btn-edit { background: var(--gold); border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
-
-        .whatsapp { position: fixed; bottom: 20px; left: 20px; background: #25d366; color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; display: flex; align-items: center; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .admin-toggle { background: none; border: 1px solid #222; color: #222; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-top: 20px; font-size: 10px; }
+        
+        /* زر واتساب */
+        .whatsapp { position: fixed; bottom: 20px; left: 20px; background: #25d366; color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; display: flex; align-items: center; gap: 10px; }
+        
+        /* زر مخفي للدخول */
+        .admin-trigger { background: none; border: none; color: #111; font-size: 10px; cursor: pointer; margin-top: 50px; width: 100%; }
+        
+        /* شكل زرار رفع الصورة */
+        .file-label { background: #333; color: #ccc; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; border: 1px dashed #555; }
+        .file-label:hover { background: #444; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1 id="brandTitle" class="logo">ياسمينا كيك</h1>
-    <p id="brandSlogan" class="slogan">حلويات صنعت بكل حب ✨</p>
+    <h1 id="brandNameDisplay" class="logo">ياسمينا كيك</h1>
+    <p id="sloganDisplay" class="slogan">حلويات صنعت بكل حب ✨</p>
 </header>
 
 <div class="container">
-    <div class="menu-grid" id="menuDisplay"></div>
+    <div id="menu" class="menu-grid"></div>
 
-    <div id="dashboard" class="admin-dashboard">
-        <h2>لوحة تحكم المديرة 👩‍🍳</h2>
+    <div id="adminArea" class="admin-dashboard">
+        <h2 style="color: var(--pink); text-align: center;">إدارة متجرك 👩‍🍳</h2>
         
         <div class="form-group">
-            <label>تغيير اسم البراند والوصف:</label>
-            <input type="text" id="newBrandName" placeholder="اسم البراند الجديد">
-            <input type="text" id="newSlogan" placeholder="وصف البراند (سلوجان)">
-            <button class="btn btn-save-brand" onclick="updateBrand()">حفظ إعدادات البراند</button>
+            <label>تعديل اسم المتجر:</label>
+            <input type="text" id="brandInput" placeholder="اسم البراند الجديد">
+            <input type="text" id="sloganInput" placeholder="وصف المتجر">
+            <button class="btn btn-brand" onclick="saveBrand()">حفظ اسم البراند</button>
         </div>
 
         <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
 
         <div class="form-group">
-            <label>إضافة صنف جديد للمنيو:</label>
-            <input type="text" id="pImg" placeholder="رابط الصورة (Direct Link من ImgBB)">
-            <input type="text" id="pName" placeholder="اسم المنتج">
-            <input type="text" id="pPrice" placeholder="السعر (مثلاً: 150 ج.م)">
-            <button class="btn btn-add" onclick="addNewProduct()">إضافة للمنيو فوراً</button>
+            <label>إضافة صنف جديد (من الاستوديو):</label>
+            <label for="imageFile" class="file-label" id="fileStatus">اضغطي هنا لاختيار صورة من التليفون 📷</label>
+            <input type="file" id="imageFile" accept="image/*" style="display: none;" onchange="handleFile()">
+            <input type="text" id="nameInput" placeholder="اسم الكيك">
+            <input type="text" id="priceInput" placeholder="السعر (مثلاً: 150 ج.م)">
+            <button class="btn btn-add" onclick="addItem()">إضافة الصنف للمنيو</button>
         </div>
     </div>
 
-    <center>
-        <button class="admin-toggle" onclick="openAdmin()">دخول لوحة التحكم</button>
-    </center>
+    <button class="admin-trigger" onclick="login()">دخول الإدارة</button>
 </div>
 
-<a href="https://wa.me/201234567890" class="whatsapp">
-    <span>طلب عبر واتساب</span>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="20">
-</a>
+<a href="https://wa.me/201234567890" class="whatsapp">طلب عبر واتساب 💬</a>
 
 <script>
-    // قاعدة البيانات (البراند والمنتجات)
-    let siteData = JSON.parse(localStorage.getItem('yasmina_store_v3')) || {
-        brandName: "ياسمينا كيك",
+    let db = JSON.parse(localStorage.getItem('yasmina_final_v1')) || {
+        brand: "ياسمينا كيك",
         slogan: "حلويات صنعت بكل حب ✨",
-        products: [
-            { name: "كيك الملوك", price: "250 ج.م", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587" }
-        ]
+        items: []
     };
 
-    // وظيفة الدخول
-    function openAdmin() {
-        let p = prompt("كلمة مرور الإدارة:");
-        if(p === "123") {
-            document.getElementById('dashboard').style.display = 'block';
-            window.scrollTo(0, document.getElementById('dashboard').offsetTop);
+    let tempImageData = "";
+
+    function login() {
+        if(prompt("كلمة السر:") === "123") {
+            document.getElementById('adminArea').style.display = 'block';
+            render();
         }
     }
 
-    // تحديث واجهة المحل
-    function refreshUI() {
-        document.getElementById('brandTitle').innerText = siteData.brandName;
-        document.getElementById('brandSlogan').innerText = siteData.slogan;
-        document.getElementById('pageTitle').innerText = siteData.brandName + " | الرئيسية";
+    // تحويل الصورة لنص (Base64) ليتم حفظها
+    function handleFile() {
+        const file = document.getElementById('imageFile').files[0];
+        const reader = new FileReader();
+        reader.onloadend = function() {
+            tempImageData = reader.result;
+            document.getElementById('fileStatus').innerText = "✅ تم اختيار الصورة بنجاح";
+            document.getElementById('fileStatus').style.color = "#ffb703";
+        }
+        if(file) reader.readAsDataURL(file);
+    }
+
+    function render() {
+        document.getElementById('brandNameDisplay').innerText = db.brand;
+        document.getElementById('sloganDisplay').innerText = db.slogan;
         
-        const menu = document.getElementById('menuDisplay');
+        const menu = document.getElementById('menu');
         menu.innerHTML = '';
         
-        siteData.products.forEach((item, index) => {
+        db.items.forEach((item, i) => {
             menu.innerHTML += `
                 <div class="card">
-                    <div class="img-box">
-                        <img src="${item.img}" onerror="this.src='https://via.placeholder.com/400x400?text=Image+Error'">
-                    </div>
+                    <div class="img-box"><img src="${item.img}"></div>
                     <div class="card-info">
                         <h3>${item.name}</h3>
                         <span class="price">${item.price}</span>
-                        <div class="item-controls" id="controls-${index}" style="display:${document.getElementById('dashboard').style.display === 'block' ? 'flex' : 'none'}">
-                            <button class="btn-edit" onclick="editProduct(${index})">تعديل</button>
-                            <button class="btn-del" onclick="deleteProduct(${index})">حذف</button>
+                        <div class="item-controls" style="display:${document.getElementById('adminArea').style.display === 'block' ? 'flex' : 'none'}">
+                            <button class="btn-del" onclick="delItem(${i})">حذف الصنف</button>
                         </div>
                     </div>
                 </div>
             `;
         });
-        localStorage.setItem('yasmina_store_v3', JSON.stringify(siteData));
+        localStorage.setItem('yasmina_final_v1', JSON.stringify(db));
     }
 
-    // وظائف التحكم
-    function updateBrand() {
-        const name = document.getElementById('newBrandName').value;
-        const slogan = document.getElementById('newSlogan').value;
-        if(name) siteData.brandName = name;
-        if(slogan) siteData.slogan = slogan;
-        refreshUI();
-        alert("تم تحديث بيانات البراند بنجاح!");
+    function saveBrand() {
+        const b = document.getElementById('brandInput').value;
+        const s = document.getElementById('sloganInput').value;
+        if(b) db.brand = b;
+        if(s) db.slogan = s;
+        render();
+        alert("تم تحديث البراند!");
     }
 
-    function addNewProduct() {
-        const img = document.getElementById('pImg').value;
-        const name = document.getElementById('pName').value;
-        const price = document.getElementById('pPrice').value;
-        if(img && name && price) {
-            siteData.products.push({name, price, img});
-            refreshUI();
-            document.getElementById('pImg').value = '';
-            document.getElementById('pName').value = '';
-            document.getElementById('pPrice').value = '';
+    function addItem() {
+        const name = document.getElementById('nameInput').value;
+        const price = document.getElementById('priceInput').value;
+        if(tempImageData && name && price) {
+            db.items.push({ name, price, img: tempImageData });
+            render();
+            // مسح الخانات
+            tempImageData = "";
+            document.getElementById('nameInput').value = '';
+            document.getElementById('priceInput').value = '';
+            document.getElementById('fileStatus').innerText = "اضغطي هنا لاختيار صورة من التليفون 📷";
         } else {
-            alert("برجاء ملء كافة الخانات");
+            alert("تأكدي من اختيار صورة وكتابة الاسم والسعر");
         }
     }
 
-    function deleteProduct(index) {
-        if(confirm("حذف هذا المنتج؟")) {
-            siteData.products.splice(index, 1);
-            refreshUI();
-        }
+    function delItem(i) {
+        if(confirm("حذف؟")) { db.items.splice(i, 1); render(); }
     }
 
-    function editProduct(index) {
-        let newName = prompt("الاسم الجديد:", siteData.products[index].name);
-        let newPrice = prompt("السعر الجديد:", siteData.products[index].price);
-        if(newName) siteData.products[index].name = newName;
-        if(newPrice) siteData.products[index].price = newPrice;
-        refreshUI();
-    }
-
-    // البداية
-    refreshUI();
+    render();
 </script>
 </body>
 </html>
