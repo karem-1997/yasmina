@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">ياسمينا كيك | Yasmina Cake</title>
+    <title id="pageTitle">متجر ياسمينا كيك</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
         :root { --pink: #ff4d6d; --gold: #ffb703; --dark: #0a0a0a; --card: #161616; }
-        body { font-family: 'Cairo', sans-serif; background: var(--dark); color: white; margin: 0; padding-bottom: 50px; }
+        body { font-family: 'Cairo', sans-serif; background: var(--dark); color: white; margin: 0; padding-bottom: 50px; overflow-x: hidden; }
 
+        /* الهيدر */
         header {
-            height: 40vh;
+            height: 45vh;
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
                         url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1500');
             background-size: cover; background-position: center;
@@ -18,160 +19,169 @@
             border-bottom: 4px solid var(--pink); text-align: center;
         }
         .logo { font-family: 'Dancing Script', cursive; font-size: 4.5rem; color: var(--pink); margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
-        .slogan { color: var(--gold); font-size: 1.1rem; margin-top: 5px; }
+        .slogan { color: var(--gold); font-size: 1.2rem; margin-top: 5px; }
 
-        .container { padding: 20px 5%; }
+        /* المنيو */
+        .container { padding: 30px 5%; }
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
         
-        .card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #333; display: flex; flex-direction: column; transition: 0.3s; }
-        .card:hover { border-color: var(--pink); }
+        .card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #333; transition: 0.3s; display: flex; flex-direction: column; }
+        .card:hover { border-color: var(--pink); transform: translateY(-5px); }
         
         .img-box { width: 100%; aspect-ratio: 1 / 1; background: #222; overflow: hidden; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        .card-info { padding: 15px; text-align: center; }
-        .card-info h3 { margin: 5px 0; font-size: 1.3rem; color: white; }
-        .price { color: var(--gold); font-size: 1.2rem; font-weight: bold; margin: 5px 0; display: block; }
+        .card-info { padding: 15px; text-align: center; flex-grow: 1; }
+        .card-info h3 { margin: 5px 0; color: white; font-size: 1.4rem; }
+        .price { color: var(--gold); font-size: 1.3rem; font-weight: bold; margin: 5px 0; display: block; }
 
-        /* لوحة التحكم */
-        .admin-dashboard { display: none; background: #111; border: 2px solid var(--pink); margin: 30px auto; padding: 25px; border-radius: 20px; max-width: 600px; }
-        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px; text-align: right; }
-        input, select { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white; font-family: 'Cairo'; }
+        /* لوحة التحكم (الداشبورد) */
+        #adminDashboard { 
+            display: none; background: #111; border: 2px solid var(--pink); 
+            margin: 40px auto; padding: 25px; border-radius: 20px; max-width: 800px;
+        }
+        .admin-dashboard h2 { color: var(--pink); border-bottom: 1px solid #333; padding-bottom: 10px; text-align: center; }
+        .form-group { margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; text-align: right; }
+        input { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white; font-family: 'Cairo'; }
         
         .btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-add { background: var(--pink); color: white; margin-top: 10px; }
-        .btn-brand { background: var(--gold); color: black; }
+        .btn-add { background: var(--pink); color: white; width: 100%; font-size: 1.1rem; }
+        .btn-save-brand { background: var(--gold); color: black; }
+        
+        .file-custom { background: #222; border: 1px dashed var(--gold); color: var(--gold); padding: 15px; text-align: center; cursor: pointer; border-radius: 8px; }
 
-        .item-controls { display: flex; gap: 5px; justify-content: center; margin-top: 10px; }
-        .btn-del { background: #ff4444; color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
-        
-        /* زر واتساب */
-        .whatsapp { position: fixed; bottom: 20px; left: 20px; background: #25d366; color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; display: flex; align-items: center; gap: 10px; }
-        
-        /* زر مخفي للدخول */
-        .admin-trigger { background: none; border: none; color: #111; font-size: 10px; cursor: pointer; margin-top: 50px; width: 100%; }
-        
-        /* شكل زرار رفع الصورة */
-        .file-label { background: #333; color: #ccc; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; border: 1px dashed #555; }
-        .file-label:hover { background: #444; }
+        .item-controls { display: flex; gap: 5px; justify-content: center; margin-top: 10px; padding: 10px; }
+        .btn-del { background: #ff4444; color: white; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer; flex: 1; }
+
+        .whatsapp { position: fixed; bottom: 20px; left: 20px; background: #25d366; color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; display: flex; align-items: center; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .admin-toggle { background: none; border: none; color: #1a1a1a; cursor: pointer; margin-top: 50px; width: 100%; font-size: 10px; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1 id="brandNameDisplay" class="logo">ياسمينا كيك</h1>
-    <p id="sloganDisplay" class="slogan">حلويات صنعت بكل حب ✨</p>
+    <h1 id="brandTitle" class="logo">ياسمينا كيك</h1>
+    <p id="brandSlogan" class="slogan">أجمل الحلويات بأيدٍ مصرية ✨</p>
 </header>
 
 <div class="container">
-    <div id="menu" class="menu-grid"></div>
+    <div class="menu-grid" id="menuDisplay"></div>
 
-    <div id="adminArea" class="admin-dashboard">
-        <h2 style="color: var(--pink); text-align: center;">إدارة متجرك 👩‍🍳</h2>
+    <div id="adminDashboard">
+        <h2 style="color: var(--pink); text-align: center;">لوحة تحكم ياسمينا 👩‍🍳</h2>
         
         <div class="form-group">
-            <label>تعديل اسم المتجر:</label>
-            <input type="text" id="brandInput" placeholder="اسم البراند الجديد">
-            <input type="text" id="sloganInput" placeholder="وصف المتجر">
-            <button class="btn btn-brand" onclick="saveBrand()">حفظ اسم البراند</button>
+            <label>تعديل اسم المحل والوصف:</label>
+            <input type="text" id="newBrandName" placeholder="اسم البراند الجديد">
+            <input type="text" id="newSlogan" placeholder="كلمة توصف المحل">
+            <button class="btn btn-save-brand" onclick="updateBrand()">حفظ التعديلات الجديدة</button>
         </div>
 
-        <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
+        <hr style="border: 0; border-top: 1px solid #333; margin: 30px 0;">
 
         <div class="form-group">
-            <label>إضافة صنف جديد (من الاستوديو):</label>
-            <label for="imageFile" class="file-label" id="fileStatus">اضغطي هنا لاختيار صورة من التليفون 📷</label>
-            <input type="file" id="imageFile" accept="image/*" style="display: none;" onchange="handleFile()">
-            <input type="text" id="nameInput" placeholder="اسم الكيك">
-            <input type="text" id="priceInput" placeholder="السعر (مثلاً: 150 ج.م)">
-            <button class="btn btn-add" onclick="addItem()">إضافة الصنف للمنيو</button>
+            <label>إضافة صنف جديد للمنيو:</label>
+            <label for="imgUpload" class="file-custom" id="fileLabel">اضغطي هنا لاختيار صورة من تليفونك 📷</label>
+            <input type="file" id="imgUpload" accept="image/*" style="display: none;" onchange="previewFile()">
+            <input type="text" id="pName" placeholder="اسم الصنف (مثلاً: تورتة مانجو)">
+            <input type="text" id="pPrice" placeholder="السعر (مثلاً: 200 ج.م)">
+            <button class="btn btn-add" onclick="addNewProduct()">إضافة للموقع فوراً</button>
         </div>
     </div>
 
-    <button class="admin-trigger" onclick="login()">دخول الإدارة</button>
+    <button class="admin-toggle" onclick="loginAdmin()">دخول الإدارة</button>
 </div>
 
 <a href="https://wa.me/201234567890" class="whatsapp">طلب عبر واتساب 💬</a>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('yasmina_final_v1')) || {
+    // تخزين البيانات
+    let appData = JSON.parse(localStorage.getItem('yasmina_vFinal')) || {
         brand: "ياسمينا كيك",
-        slogan: "حلويات صنعت بكل حب ✨",
+        slogan: "أجمل الحلويات بأيدٍ مصرية ✨",
         items: []
     };
 
-    let tempImageData = "";
+    let selectedImgBase64 = "";
 
-    function login() {
-        if(prompt("كلمة السر:") === "123") {
-            document.getElementById('adminArea').style.display = 'block';
+    // الدخول للباسورد
+    function loginAdmin() {
+        if(prompt("كلمة المرور:") === "123") {
+            document.getElementById('adminDashboard').style.display = 'block';
             render();
+            window.scrollTo(0, document.getElementById('adminDashboard').offsetTop);
         }
     }
 
-    // تحويل الصورة لنص (Base64) ليتم حفظها
-    function handleFile() {
-        const file = document.getElementById('imageFile').files[0];
+    // معالجة صورة الاستوديو
+    function previewFile() {
+        const file = document.getElementById('imgUpload').files[0];
         const reader = new FileReader();
         reader.onloadend = function() {
-            tempImageData = reader.result;
-            document.getElementById('fileStatus').innerText = "✅ تم اختيار الصورة بنجاح";
-            document.getElementById('fileStatus').style.color = "#ffb703";
+            selectedImgBase64 = reader.result;
+            document.getElementById('fileLabel').innerText = "✅ تم اختيار الصورة";
+            document.getElementById('fileLabel').style.borderColor = "#25d366";
         }
-        if(file) reader.readAsDataURL(file);
+        if (file) reader.readAsDataURL(file);
     }
 
+    // رسم الموقع
     function render() {
-        document.getElementById('brandNameDisplay').innerText = db.brand;
-        document.getElementById('sloganDisplay').innerText = db.slogan;
-        
-        const menu = document.getElementById('menu');
-        menu.innerHTML = '';
-        
-        db.items.forEach((item, i) => {
-            menu.innerHTML += `
+        document.getElementById('brandTitle').innerText = appData.brand;
+        document.getElementById('brandSlogan').innerText = appData.slogan;
+        document.getElementById('pageTitle').innerText = appData.brand;
+
+        const display = document.getElementById('menuDisplay');
+        display.innerHTML = '';
+
+        appData.items.forEach((item, index) => {
+            display.innerHTML += `
                 <div class="card">
                     <div class="img-box"><img src="${item.img}"></div>
                     <div class="card-info">
                         <h3>${item.name}</h3>
                         <span class="price">${item.price}</span>
-                        <div class="item-controls" style="display:${document.getElementById('adminArea').style.display === 'block' ? 'flex' : 'none'}">
-                            <button class="btn-del" onclick="delItem(${i})">حذف الصنف</button>
+                        <div class="item-controls" style="display:${document.getElementById('adminDashboard').style.display === 'block' ? 'flex' : 'none'}">
+                            <button class="btn-del" onclick="deleteItem(${index})">حذف الصنف</button>
                         </div>
                     </div>
                 </div>
             `;
         });
-        localStorage.setItem('yasmina_final_v1', JSON.stringify(db));
+        localStorage.setItem('yasmina_vFinal', JSON.stringify(appData));
     }
 
-    function saveBrand() {
-        const b = document.getElementById('brandInput').value;
-        const s = document.getElementById('sloganInput').value;
-        if(b) db.brand = b;
-        if(s) db.slogan = s;
+    // وظائف اللوحة
+    function updateBrand() {
+        const n = document.getElementById('newBrandName').value;
+        const s = document.getElementById('newSlogan').value;
+        if(n) appData.brand = n;
+        if(s) appData.slogan = s;
         render();
-        alert("تم تحديث البراند!");
+        alert("تم تغيير اسم المحل بنجاح!");
     }
 
-    function addItem() {
-        const name = document.getElementById('nameInput').value;
-        const price = document.getElementById('priceInput').value;
-        if(tempImageData && name && price) {
-            db.items.push({ name, price, img: tempImageData });
+    function addNewProduct() {
+        const name = document.getElementById('pName').value;
+        const price = document.getElementById('pPrice').value;
+        if(selectedImgBase64 && name && price) {
+            appData.items.push({ name, price, img: selectedImgBase64 });
             render();
-            // مسح الخانات
-            tempImageData = "";
-            document.getElementById('nameInput').value = '';
-            document.getElementById('priceInput').value = '';
-            document.getElementById('fileStatus').innerText = "اضغطي هنا لاختيار صورة من التليفون 📷";
+            // تفريغ الخانات
+            selectedImgBase64 = "";
+            document.getElementById('pName').value = '';
+            document.getElementById('pPrice').value = '';
+            document.getElementById('fileLabel').innerText = "اضغطي هنا لاختيار صورة من تليفونك 📷";
         } else {
-            alert("تأكدي من اختيار صورة وكتابة الاسم والسعر");
+            alert("من فضلك اختاري صورة واكتبي الاسم والسعر");
         }
     }
 
-    function delItem(i) {
-        if(confirm("حذف؟")) { db.items.splice(i, 1); render(); }
+    function deleteItem(index) {
+        if(confirm("هل أنتي متأكدة من حذف هذا الصنف؟")) {
+            appData.items.splice(index, 1);
+            render();
+        }
     }
 
     render();
