@@ -20,6 +20,7 @@
         }
         .logo { font-family: 'Dancing Script', cursive; font-size: 4.5rem; color: var(--pink); margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
         .slogan { color: var(--gold); font-size: 1.2rem; margin-top: 5px; }
+        .about-text { color: #ccc; font-size: 1rem; margin-top: 10px; max-width: 80%; }
 
         /* المنيو */
         .container { padding: 30px 5%; }
@@ -42,7 +43,7 @@
         }
         .admin-dashboard h2 { color: var(--pink); border-bottom: 1px solid #333; padding-bottom: 10px; text-align: center; }
         .form-group { margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; text-align: right; }
-        input { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white; font-family: 'Cairo'; }
+        input, textarea { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white; font-family: 'Cairo'; }
         
         .btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .btn-add { background: var(--pink); color: white; width: 100%; font-size: 1.1rem; }
@@ -62,6 +63,7 @@
 <header>
     <h1 id="brandTitle" class="logo">ياسمينا كيك</h1>
     <p id="brandSlogan" class="slogan">أجمل الحلويات بأيدٍ مصرية ✨</p>
+    <p id="brandAbout" class="about-text"></p>
 </header>
 
 <div class="container">
@@ -71,10 +73,12 @@
         <h2 style="color: var(--pink); text-align: center;">لوحة تحكم ياسمينا 👩‍🍳</h2>
         
         <div class="form-group">
-            <label>تعديل اسم المحل والوصف:</label>
+            <label>إعدادات البراند والتواصل:</label>
             <input type="text" id="newBrandName" placeholder="اسم البراند الجديد">
-            <input type="text" id="newSlogan" placeholder="كلمة توصف المحل">
-            <button class="btn btn-save-brand" onclick="updateBrand()">حفظ التعديلات الجديدة</button>
+            <input type="text" id="newSlogan" placeholder="كلمة توصف المحل (سلوجان)">
+            <textarea id="newAbout" placeholder="اكتبي كلام عن مشروعك (عن البراند)"></textarea>
+            <input type="text" id="newWhatsApp" placeholder="رقم الواتساب (مثال: 201234567890)">
+            <button class="btn btn-save-brand" onclick="updateBrand()">حفظ كافة التعديلات</button>
         </div>
 
         <hr style="border: 0; border-top: 1px solid #333; margin: 30px 0;">
@@ -92,19 +96,20 @@
     <button class="admin-toggle" onclick="loginAdmin()">دخول الإدارة</button>
 </div>
 
-<a href="https://wa.me/201234567890" class="whatsapp">طلب عبر واتساب 💬</a>
+<a href="#" id="whatsappLink" class="whatsapp" target="_blank">طلب عبر واتساب 💬</a>
 
 <script>
-    // تخزين البيانات
-    let appData = JSON.parse(localStorage.getItem('yasmina_vFinal')) || {
+    // تخزين البيانات شاملة الإضافات الجديدة
+    let appData = JSON.parse(localStorage.getItem('yasmina_vFinal_v2')) || {
         brand: "ياسمينا كيك",
         slogan: "أجمل الحلويات بأيدٍ مصرية ✨",
+        about: "أهلاً بكم في عالمنا الصغير للحلويات المنزلية",
+        whatsapp: "201234567890",
         items: []
     };
 
     let selectedImgBase64 = "";
 
-    // الدخول للباسورد
     function loginAdmin() {
         if(prompt("كلمة المرور:") === "123") {
             document.getElementById('adminDashboard').style.display = 'block';
@@ -113,7 +118,6 @@
         }
     }
 
-    // معالجة صورة الاستوديو
     function previewFile() {
         const file = document.getElementById('imgUpload').files[0];
         const reader = new FileReader();
@@ -125,11 +129,15 @@
         if (file) reader.readAsDataURL(file);
     }
 
-    // رسم الموقع
     function render() {
+        // تحديث النصوص في الهيدر
         document.getElementById('brandTitle').innerText = appData.brand;
         document.getElementById('brandSlogan').innerText = appData.slogan;
+        document.getElementById('brandAbout').innerText = appData.about;
         document.getElementById('pageTitle').innerText = appData.brand;
+        
+        // تحديث رابط الواتساب
+        document.getElementById('whatsappLink').href = "https://wa.me/" + appData.whatsapp;
 
         const display = document.getElementById('menuDisplay');
         display.innerHTML = '';
@@ -148,17 +156,22 @@
                 </div>
             `;
         });
-        localStorage.setItem('yasmina_vFinal', JSON.stringify(appData));
+        localStorage.setItem('yasmina_vFinal_v2', JSON.stringify(appData));
     }
 
-    // وظائف اللوحة
     function updateBrand() {
         const n = document.getElementById('newBrandName').value;
         const s = document.getElementById('newSlogan').value;
+        const a = document.getElementById('newAbout').value;
+        const w = document.getElementById('newWhatsApp').value;
+        
         if(n) appData.brand = n;
         if(s) appData.slogan = s;
+        if(a) appData.about = a;
+        if(w) appData.whatsapp = w.replace(/\+/g, ''); // إزالة علامة + لو كتبت
+        
         render();
-        alert("تم تغيير اسم المحل بنجاح!");
+        alert("تم حفظ كافة التعديلات بنجاح!");
     }
 
     function addNewProduct() {
@@ -167,7 +180,6 @@
         if(selectedImgBase64 && name && price) {
             appData.items.push({ name, price, img: selectedImgBase64 });
             render();
-            // تفريغ الخانات
             selectedImgBase64 = "";
             document.getElementById('pName').value = '';
             document.getElementById('pPrice').value = '';
