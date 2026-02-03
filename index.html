@@ -3,136 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ياسمينا كيك | Yasmina Cake Admin</title>
+    <title>ياسمينا كيك | Yasmina Cake</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --main-pink: #e91e63; --gold: #ffb703; --dark: #0f0f0f; }
-        body { font-family: 'Cairo', sans-serif; background: var(--dark); color: white; margin: 0; padding-bottom: 50px; }
-        
-        header { padding: 60px 20px; background: #000; border-bottom: 4px solid var(--main-pink); text-align: center; }
-        .logo { font-family: 'Dancing Script', cursive; font-size: 4.5rem; color: var(--main-pink); margin: 0; }
+        :root { --pink: #ff4d6d; --gold: #ffb703; --dark: #0a0a0a; --card-bg: #161616; }
+        body { font-family: 'Cairo', sans-serif; background: var(--dark); color: white; margin: 0; padding-bottom: 100px; }
 
-        /* لوحة التحكم */
-        #adminPanel { 
-            display: none; background: #1a1a1a; padding: 25px; border: 2px solid var(--gold);
-            margin: 20px 10%; border-radius: 15px; box-shadow: 0 0 20px rgba(255,183,3,0.2);
+        /* الهيدر الفخم */
+        header {
+            height: 60vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1550617931-e17a7b70dce2?auto=format&fit=crop&w=1500&q=80');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            border-bottom: 4px solid var(--pink);
         }
-        .admin-inputs input { padding: 12px; margin: 10px 5px; border-radius: 8px; border: none; width: 250px; font-family: 'Cairo'; }
-        .btn-action { background: var(--main-pink); color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .btn-admin-toggle { background: transparent; color: #333; border: none; cursor: pointer; font-size: 12px; margin-top: 10px; }
+        .logo { font-family: 'Dancing Script', cursive; font-size: 5.5rem; color: var(--pink); margin: 0; text-shadow: 3px 3px 10px rgba(0,0,0,0.5); }
+        .slogan { font-size: 1.5rem; color: var(--gold); margin-top: 10px; }
 
-        /* الشبكة (المنيو) */
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 40px 10%; }
-        .card { background: #1a1a1a; border-radius: 20px; overflow: hidden; border: 1px solid #333; transition: 0.4s; position: relative; }
-        .card:hover { transform: translateY(-10px); border-color: var(--main-pink); }
-        .card img { width: 100%; height: 250px; object-fit: cover; }
-        .card-body { padding: 20px; text-align: center; }
-        .price-tag { color: var(--gold); font-size: 1.5rem; font-weight: bold; display: block; margin: 10px 0; }
+        /* لوحة التحكم (مخفية) */
+        #adminPanel { 
+            display: none; background: #1f1f1f; padding: 30px; border: 2px solid var(--pink);
+            margin: 20px 10%; border-radius: 20px; box-shadow: 0 0 30px rgba(255,77,109,0.2);
+        }
+        .admin-inputs input { padding: 12px; margin: 5px; border-radius: 8px; border: 1px solid #333; background: #000; color: white; width: 250px; }
+        .btn-main { background: var(--pink); color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .admin-btn-toggle { background: transparent; border: none; color: #222; font-size: 10px; cursor: pointer; }
+
+        /* المنيو */
+        .section-title { text-align: center; font-size: 2.5rem; color: white; margin: 50px 0; font-weight: bold; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 0 10%; }
         
-        /* أزرار الحذف والتعديل (تظهر لياسمينا فقط) */
-        .admin-controls { display: none; margin-top: 15px; border-top: 1px solid #333; padding-top: 10px; }
-        .btn-delete { background: #ff4444; color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; margin-left: 5px; }
-        .btn-edit { background: var(--gold); color: black; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
+        .card { 
+            background: var(--card-bg); border-radius: 25px; overflow: hidden; 
+            transition: 0.4s; border: 1px solid #222; position: relative;
+        }
+        .card:hover { transform: translateY(-10px); border-color: var(--pink); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        
+        /* ضبط الصورة عشان متظهرش مكسورة */
+        .img-container { width: 100%; height: 280px; background: #222; overflow: hidden; }
+        .card img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .card-body { padding: 20px; text-align: center; }
+        .card-body h3 { margin: 0; font-size: 1.5rem; color: var(--pink); }
+        .price { display: block; margin: 10px 0; font-size: 1.3rem; color: var(--gold); font-weight: bold; }
 
-        .whatsapp-btn { position: fixed; bottom: 30px; left: 30px; background: #25d366; color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 100; }
+        .admin-actions { margin-top: 15px; display: none; gap: 10px; justify-content: center; }
+        .btn-delete { background: #ff4d4d; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+        .btn-edit { background: var(--gold); color: black; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+
+        /* زر واتساب */
+        .whatsapp-float {
+            position: fixed; bottom: 30px; left: 30px; background: #25d366; 
+            color: white; padding: 15px 30px; border-radius: 50px; 
+            text-decoration: none; font-weight: bold; display: flex; align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4); z-index: 1000;
+        }
+        .whatsapp-float i { margin-left: 10px; font-size: 1.5rem; }
     </style>
 </head>
 <body>
 
     <header>
         <h1 class="logo">Yasmina Cake</h1>
-        <p>عالم من الحلويات الساحرة</p>
-        <button class="btn-admin-toggle" onclick="checkAuth()">دخول الإدارة</button>
+        <p class="slogan">صُنع بحب.. ليُحلي يومك ✨</p>
+        <button class="admin-btn-toggle" onclick="authAdmin()">لوحة الإدارة</button>
     </header>
 
     <div id="adminPanel">
-        <h2 style="color: var(--gold)">لوحة تحكم ياسمينا ✨</h2>
+        <h2 style="color: var(--pink)">لوحة تحكم ياسمينا 👩‍🍳</h2>
         <div class="admin-inputs">
-            <input type="text" id="imgInput" placeholder="رابط صورة الحلوى">
-            <input type="text" id="nameInput" placeholder="اسم الصنف">
-            <input type="text" id="priceInput" placeholder="السعر (مثلاً: 250 ج.م)">
-            <button class="btn-action" onclick="addNewItem()">إضافة الصنف</button>
+            <input type="text" id="pImg" placeholder="رابط الصورة المباشر">
+            <input type="text" id="pName" placeholder="اسم الصنف">
+            <input type="text" id="pPrice" placeholder="السعر (مثال: 200 ج.م)">
+            <button class="btn-main" onclick="saveItem()">إضافة للمنيو</button>
         </div>
-        <p style="font-size: 12px; color: #888;">* لتعديل السعر أو الحذف، استخدم الأزرار التي ستظهر على الكروت أسفله.</p>
     </div>
 
-    <div class="menu-grid" id="menuDisplay">
+    <h2 class="section-title">قائمة الحلويات المميزة</h2>
+    <div class="menu-grid" id="menu">
         </div>
 
-    <a href="https://wa.me/201234567890" class="whatsapp-btn">اطلبي عبر واتساب 💬</a>
+    <a href="https://wa.me/201234567890" class="whatsapp-float" target="_blank">
+        اطلبي الآن عبر واتساب <i class="fab fa-whatsapp"></i>
+    </a>
 
     <script>
-        let isAdmin = false;
-        let menuItems = JSON.parse(localStorage.getItem('yasminaMenu')) || [
-            { id: 1, name: 'تورتة شوكولاتة فاخرة', price: '350 ج.م', img: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587' },
-            { id: 2, name: 'كب كيك ريد فيلفيت', price: '150 ج.م', img: 'https://images.unsplash.com/photo-1550617931-e17a7b70dce2' }
+        let isLogged = false;
+        let products = JSON.parse(localStorage.getItem('yasmina_data')) || [
+            { id: 1, name: 'تورتة الشوكولاتة', price: '350 ج.م', img: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587' },
+            { id: 2, name: 'كب كيك الفواكه', price: '120 ج.م', img: 'https://images.unsplash.com/photo-1550617931-e17a7b70dce2' }
         ];
 
-        function checkAuth() {
-            let pass = prompt("من فضلك أدخلي كلمة السر:");
-            if (pass === "yasmina2026") {
-                isAdmin = true;
+        function authAdmin() {
+            let p = prompt("كلمة السر يا ياسمينا:");
+            if(p === "123") {
+                isLogged = true;
                 document.getElementById('adminPanel').style.display = 'block';
-                renderMenu();
-                alert("مرحباً يا ياسمينا! يمكنك الآن التحكم في المنيو.");
-            } else {
-                alert("كلمة سر خاطئة!");
+                draw();
             }
         }
 
-        function renderMenu() {
-            const display = document.getElementById('menuDisplay');
-            display.innerHTML = '';
-            
-            menuItems.forEach((item, index) => {
-                display.innerHTML += `
+        function draw() {
+            const container = document.getElementById('menu');
+            container.innerHTML = '';
+            products.forEach((item, index) => {
+                container.innerHTML += `
                     <div class="card">
-                        <img src="${item.img}" alt="${item.name}">
+                        <div class="img-container">
+                            <img src="${item.img}" onerror="this.src='https://via.placeholder.com/300x280?text=Yasmina+Cake'">
+                        </div>
                         <div class="card-body">
                             <h3>${item.name}</h3>
-                            <span class="price-tag">${item.price}</span>
-                            <div class="admin-controls" style="display: ${isAdmin ? 'block' : 'none'}">
-                                <button class="btn-edit" onclick="editPrice(${index})">تعديل السعر</button>
-                                <button class="btn-delete" onclick="deleteItem(${index})">حذف</button>
+                            <span class="price">${item.price}</span>
+                            <div class="admin-actions" style="display: ${isLogged ? 'flex' : 'none'}">
+                                <button class="btn-edit" onclick="update(${index})">تعديل</button>
+                                <button class="btn-delete" onclick="remove(${index})">حذف</button>
                             </div>
                         </div>
                     </div>
                 `;
             });
-            localStorage.setItem('yasminaMenu', JSON.stringify(menuItems));
+            localStorage.setItem('yasmina_data', JSON.stringify(products));
         }
 
-        function addNewItem() {
-            const img = document.getElementById('imgInput').value;
-            const name = document.getElementById('nameInput').value;
-            const price = document.getElementById('priceInput').value;
-
+        function saveItem() {
+            const img = document.getElementById('pImg').value;
+            const name = document.getElementById('pName').value;
+            const price = document.getElementById('pPrice').value;
             if(img && name && price) {
-                menuItems.push({ id: Date.now(), name, price, img });
-                renderMenu();
-                document.getElementById('imgInput').value = '';
-                document.getElementById('nameInput').value = '';
-                document.getElementById('priceInput').value = '';
+                products.push({ id: Date.now(), name, price, img });
+                draw();
+                document.getElementById('pImg').value = ''; 
+                document.getElementById('pName').value = ''; 
+                document.getElementById('pPrice').value = '';
             }
         }
 
-        function deleteItem(index) {
-            if(confirm("هل أنتي متأكدة من حذف هذا الصنف؟")) {
-                menuItems.splice(index, 1);
-                renderMenu();
-            }
+        function remove(i) {
+            if(confirm('متأكدة من الحذف؟')) { products.splice(i, 1); draw(); }
         }
 
-        function editPrice(index) {
-            let newPrice = prompt("أدخلي السعر الجديد:", menuItems[index].price);
-            if (newPrice) {
-                menuItems[index].price = newPrice;
-                renderMenu();
-            }
+        function update(i) {
+            let nP = prompt("السعر الجديد:", products[i].price);
+            if(nP) { products[i].price = nP; draw(); }
         }
 
-        // تشغيل المنيو عند فتح الصفحة لأول مرة
-        renderMenu();
+        draw();
     </script>
 </body>
 </html>
