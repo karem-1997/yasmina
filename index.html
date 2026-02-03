@@ -24,7 +24,6 @@
         .container { padding: 30px 5%; }
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
         
-        /* الإطار الذهبي الملكي للصور */
         .card { 
             background: var(--card); border-radius: 20px; overflow: hidden; 
             border: 1px solid #333; display: flex; flex-direction: column;
@@ -35,27 +34,27 @@
         }
         .img-box img { 
             width: 100%; height: 100%; object-fit: cover; border-radius: 15px;
-            border: 3px solid var(--gold); /* الإطار الذهبي */
-            box-shadow: 0 0 15px rgba(255, 183, 3, 0.3); /* توهج خفيف */
+            border: 3px solid var(--gold); 
+            box-shadow: 0 0 15px rgba(255, 183, 3, 0.3);
         }
         
         .card-info { padding: 15px; text-align: center; }
-        .price { color: var(--gold); font-size: 1.3rem; font-weight: bold; }
+        .price { color: var(--gold); font-size: 1.3rem; font-weight: bold; display: block; margin-bottom: 10px; }
 
-        /* لوحة التحكم */
         #adminDashboard { display: none; background: #111; border: 2px solid var(--pink); padding: 25px; border-radius: 20px; margin-bottom: 30px; }
         .form-section { display: grid; gap: 10px; margin-bottom: 20px; }
-        input, textarea { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white; font-family: 'Cairo'; }
+        input, textarea { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white; font-family: 'Cairo'; width: 100%; box-sizing: border-box; }
         
-        .btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+        .btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
         .btn-pink { background: var(--pink); color: white; }
         .btn-gold { background: var(--gold); color: black; }
+        .btn-edit { background: #444; color: var(--gold); font-size: 0.8rem; padding: 5px 10px; margin: 5px; width: auto; }
+        .btn-del { background: #b91c1c; color: white; font-size: 0.8rem; padding: 5px 10px; margin: 5px; width: auto; }
         
         .file-label { background: #222; border: 1px dashed var(--gold); color: var(--gold); padding: 15px; text-align: center; cursor: pointer; border-radius: 8px; display: block; }
         .whatsapp { position: fixed; bottom: 20px; left: 20px; background: #25d366; color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         .admin-toggle { background: none; border: none; color: #111; cursor: pointer; width: 100%; margin-top: 50px; font-size: 10px; }
         
-        /* خانة حماية الباسورد */
         .master-lock { background: #1a1a1a; padding: 15px; border-radius: 10px; border: 1px solid var(--gold); margin-top: 20px; }
     </style>
 </head>
@@ -64,7 +63,7 @@
 <header>
     <h1 id="brandTitle" class="logo">ياسمينا كيك</h1>
     <p id="brandSlogan" class="slogan"></p>
-    <p id="brandAbout" style="color:#ccc; max-width:80%"></p>
+    <p id="brandAbout" style="color:#ccc; max-width:80%; margin: 0 auto;"></p>
 </header>
 
 <div class="container">
@@ -75,7 +74,7 @@
             <input type="text" id="newBrand" placeholder="اسم البراند">
             <input type="text" id="newSlogan" placeholder="السلوجان">
             <textarea id="newAbout" placeholder="عن المشروع..."></textarea>
-            <input type="text" id="newWA" placeholder="رقم الواتساب">
+            <input type="text" id="newWA" placeholder="رقم الواتساب (مثال: 201234567890)">
             <button class="btn btn-gold" onclick="updateSettings()">حفظ الهوية</button>
         </div>
 
@@ -91,12 +90,12 @@
 
         <div class="master-lock">
             <p style="color:var(--gold); margin-top:0; font-size:0.9rem;">🔐 منطقة المالك (لياسمينة فقط):</p>
-            <input type="password" id="masterPassInput" placeholder="ادخلي باسورد المالك لتغيير باسورد الدخول">
+            <input type="password" id="masterPassInput" placeholder="باسورد المالك لتغيير باسورد التيم">
             <input type="text" id="newLoginPass" placeholder="باسورد الدخول الجديد">
             <button class="btn" style="background:#555; color:white;" onclick="changeLoginPassword()">تغيير باسورد التيم</button>
         </div>
         
-        <button class="btn" style="background:#444; color:white; margin-top:15px;" onclick="location.reload()">خروج</button>
+        <button class="btn" style="background:#444; color:white; margin-top:15px;" onclick="location.reload()">خروج وحفظ</button>
     </div>
 
     <div id="menuGrid" class="menu-grid"></div>
@@ -119,19 +118,18 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
     let currentImg = "";
-    const MASTER_KEY = "Yasmina_Queen_2026"; // الباسورد النهائي لياسمينة
+    const MASTER_KEY = "Yasmina_Queen_2026"; 
 
-    // نظام الدخول
     function enterAdmin() {
         database.ref('auth/pass').once('value', (snap) => {
-            let correctPass = snap.val() || "123"; // الافتراضي 123
+            let correctPass = snap.val() || "123";
             if(prompt("ادخل باسورد الإدارة:") === correctPass) {
                 document.getElementById('adminDashboard').style.display = 'block';
+                renderMenu(); // إعادة رندر المنيو لإظهار أزرار التحكم
             } else { alert("خطأ في الباسورد!"); }
         });
     }
 
-    // تغيير باسورد الدخول باستخدام الماستر كي
     function changeLoginPassword() {
         const mInput = document.getElementById('masterPassInput').value;
         const newPass = document.getElementById('newLoginPass').value;
@@ -139,8 +137,8 @@
             if(newPass) {
                 database.ref('auth/pass').set(newPass);
                 alert("تم تغيير باسورد الدخول بنجاح!");
-            } else { alert("اكتبي الباسورد الجديد أولاً"); }
-        } else { alert("باسورد المالك غير صحيح! لا يمكن التغيير."); }
+            } else { alert("اكتبي الباسورد الجديد"); }
+        } else { alert("باسورد المالك خطأ!"); }
     }
 
     function previewImg() {
@@ -155,10 +153,10 @@
 
     function updateSettings() {
         const settings = {
-            brand: document.getElementById('newBrand').value,
-            slogan: document.getElementById('newSlogan').value,
-            about: document.getElementById('newAbout').value,
-            wa: document.getElementById('newWA').value
+            brand: document.getElementById('newBrand').value || "ياسمينا كيك",
+            slogan: document.getElementById('newSlogan').value || "",
+            about: document.getElementById('newAbout').value || "",
+            wa: document.getElementById('newWA').value || "201234567890"
         };
         database.ref('settings').update(settings);
         alert("تم الحفظ!");
@@ -171,11 +169,49 @@
             database.ref('items').push({ name, price, img: currentImg });
             alert("تم الرفع!");
             location.reload();
+        } else { alert("اكملي البيانات!"); }
+    }
+
+    // وظيفة تعديل السعر
+    function editPrice(id, oldPrice) {
+        const newPrice = prompt("ادخلي السعر الجديد:", oldPrice);
+        if (newPrice !== null && newPrice !== "") {
+            database.ref('items/' + id).update({ price: newPrice });
         }
     }
 
-    function deleteItem(id) { if(confirm("حذف؟")) database.ref('items/' + id).remove(); }
+    function deleteItem(id) { if(confirm("هل تريد حذف هذا المنتج نهائياً؟")) database.ref('items/' + id).remove(); }
 
+    function renderMenu() {
+        database.ref().once('value', (snapshot) => {
+            const data = snapshot.val();
+            if(!data) return;
+            
+            const grid = document.getElementById('menuGrid');
+            grid.innerHTML = '';
+            
+            if(data.items) {
+                Object.keys(data.items).forEach(id => {
+                    const item = data.items[id];
+                    const isAdmin = document.getElementById('adminDashboard').style.display === 'block';
+                    grid.innerHTML += `
+                        <div class="card">
+                            <div class="img-box"><img src="${item.img}"></div>
+                            <div class="card-info">
+                                <h3>${item.name}</h3>
+                                <span class="price">${item.price}</span>
+                                ${isAdmin ? `
+                                    <button class="btn btn-edit" onclick="editPrice('${id}', '${item.price}')">تعديل السعر</button>
+                                    <button class="btn btn-del" onclick="deleteItem('${id}')">حذف المنتج</button>
+                                ` : ''}
+                            </div>
+                        </div>`;
+                });
+            }
+        });
+    }
+
+    // استماع للتغييرات اللحظية
     database.ref().on('value', (snapshot) => {
         const data = snapshot.val();
         if(!data) return;
@@ -185,23 +221,7 @@
             document.getElementById('brandAbout').innerText = data.settings.about || "";
             document.getElementById('waBtn').href = "https://wa.me/" + data.settings.wa;
         }
-        const grid = document.getElementById('menuGrid');
-        grid.innerHTML = '';
-        if(data.items) {
-            Object.keys(data.items).forEach(id => {
-                const item = data.items[id];
-                const isAdmin = document.getElementById('adminDashboard').style.display === 'block';
-                grid.innerHTML += `
-                    <div class="card">
-                        <div class="img-box"><img src="${item.img}"></div>
-                        <div class="card-info">
-                            <h3>${item.name}</h3>
-                            <span class="price">${item.price} ج.م</span>
-                            ${isAdmin ? `<br><button onclick="deleteItem('${id}')" style="background:red; color:white; border:none; padding:5px; border-radius:5px; margin-top:10px; cursor:pointer;">حذف</button>` : ''}
-                        </div>
-                    </div>`;
-            });
-        }
+        renderMenu();
     });
 </script>
 </body>
