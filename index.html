@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ياسمينا كيك | Yasmina Cake Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root { --main-pink: #e91e63; --gold: #ffb703; --dark: #121212; }
+        body { font-family: 'Cairo', sans-serif; background: var(--dark); color: white; margin: 0; text-align: center; }
+        
+        /* الهيدر */
+        header { padding: 80px 20px; background: linear-gradient(45deg, #000, #222); border-bottom: 3px solid var(--main-pink); }
+        .logo { font-family: 'Dancing Script', cursive; font-size: 5rem; color: var(--main-pink); margin: 0; }
+
+        /* منطقة المنيو */
+        .menu-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; padding: 40px 10%; 
+        }
+        .card { background: #1e1e1e; border-radius: 15px; overflow: hidden; border: 1px solid #333; transition: 0.3s; }
+        .card:hover { transform: translateY(-10px); border-color: var(--main-pink); }
+        .card img { width: 100%; height: 250px; object-fit: cover; }
+        .card-body { padding: 15px; }
+        .price-tag { color: var(--gold); font-weight: bold; font-size: 1.2rem; }
+
+        /* لوحة تحكم ياسمينا (مخفية في البداية) */
+        #adminPanel { 
+            display: none; background: #222; padding: 20px; border: 2px dashed var(--main-pink);
+            margin: 20px 10%; border-radius: 15px;
+        }
+        input { padding: 10px; margin: 5px; border-radius: 5px; border: none; width: 80%; max-width: 300px; }
+        .btn-add { background: var(--main-pink); color: white; padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; }
+        
+        /* زرار سري لفتح التحكم */
+        .secret-login { background: none; border: none; color: #333; cursor: pointer; font-size: 10px; }
+
+        .whatsapp-btn {
+            position: fixed; bottom: 20px; left: 20px; background: #25d366; 
+            color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 class="logo">Yasmina Cake</h1>
+        <p>مطبخ السعادة لجميع أنواع الحلويات</p>
+        <button class="secret-login" onclick="login()">لوحة الإدارة</button>
+    </header>
+
+    <div id="adminPanel">
+        <h3>مرحباً ياسمينا.. أضيفي صنف جديد ✨</h3>
+        <input type="text" id="imgUrl" placeholder="حطي رابط صورة الحلويات هنا">
+        <br>
+        <input type="text" id="itemName" placeholder="اسم الصنف (مثلاً: تورتة شوكولاتة)">
+        <br>
+        <input type="number" id="itemPrice" placeholder="السعر">
+        <br>
+        <button class="btn-add" onclick="addItem()">إضافة للموقع فوراً</button>
+    </div>
+
+    <div class="menu-grid" id="mainMenu">
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587" alt="تورتة">
+            <div class="card-body">
+                <h3>تورتة ملكية</h3>
+                <p class="price-tag">350 ج.م</p>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://wa.me/201234567890" class="whatsapp-btn">اطلبي عبر واتساب 💬</a>
+
+    <script>
+        // دالة الدخول (الباسورد)
+        function login() {
+            let password = prompt("أدخلي كلمة السر الخاصة بكِ يا ياسمينا:");
+            if (password === "yasmina123") { // الباسورد هنا هو yasmina123 تقدر تغيره
+                document.getElementById('adminPanel').style.display = 'block';
+                alert("أهلاً يا ملكة الحلويات! تقدرين الآن إضافة أصناف جديدة.");
+            } else {
+                alert("كلمة السر غلط يا قمر!");
+            }
+        }
+
+        // دالة إضافة صنف جديد للمنيو
+        function addItem() {
+            const url = document.getElementById('imgUrl').value;
+            const name = document.getElementById('itemName').value;
+            const price = document.getElementById('itemPrice').value;
+
+            if(url && name && price) {
+                const menu = document.getElementById('mainMenu');
+                const newCard = `
+                    <div class="card">
+                        <img src="${url}" alt="${name}">
+                        <div class="card-body">
+                            <h3>${name}</h3>
+                            <p class="price-tag">${price} ج.م</p>
+                        </div>
+                    </div>
+                `;
+                menu.innerHTML += newCard;
+                
+                // مسح الخانات بعد الإضافة
+                document.getElementById('imgUrl').value = '';
+                document.getElementById('itemName').value = '';
+                document.getElementById('itemPrice').value = '';
+            } else {
+                alert("من فضلك كملي البيانات (الصورة والاسم والسعر)");
+            }
+        }
+    </script>
+</body>
+</html>
+
